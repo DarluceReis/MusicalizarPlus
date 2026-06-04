@@ -1,6 +1,7 @@
 @page "/aluno/pratica/fundamentos"
 @page "/aluno/pratica/{Slug}"
 @attribute [Authorize]
+@rendermode InteractiveServer
 @inject LearningContentStore ContentStore
 
 <PageTitle>Prática - @Practice.Title</PageTitle>
@@ -35,27 +36,31 @@
                 </div>
                 <p>@Practice.FeedbackText</p>
 
-                <form method="post" action="@ReplyAction" class="feedback-response-form">
-                    <textarea class="reply-textarea" name="resposta" placeholder="Escreva sua resposta ao professor">@Practice.StudentReply</textarea>
-                    <button class="primary" type="submit">Responder feedback</button>
-                </form>
+                <div class="feedback-response-form">
+                    <textarea class="reply-textarea" @bind="replyText" placeholder="Escreva sua resposta ao professor"></textarea>
+                    <button class="primary" type="button" disabled="@isSendingReply" @onclick="SendReply">
+                        @(isSendingReply ? "Enviando..." : "Responder feedback")
+                    </button>
+                </div>
             }
             else
             {
                 <p>Aguardando avaliação do professor.</p>
             }
 
-            <form method="post" action="@VideoAction" enctype="multipart/form-data" class="feedback-response-form">
+            <div class="feedback-response-form">
                 <label class="compact-file">
-                    <span>Selecionar vídeo</span>
-                    <input type="file" name="video" accept="video/*" required />
+                    <span>@(selectedVideoName ?? "Selecionar vídeo")</span>
+                    <InputFile OnChange="SelectResponseVideo" accept="video/*" />
                 </label>
-                <button class="primary" type="submit">Enviar vídeo resposta</button>
-            </form>
+                <button class="primary" type="button" disabled="@(!CanSendVideo)" @onclick="SendVideoResponseAsync">
+                    @(isSendingVideo ? "Enviando..." : "Enviar vídeo resposta")
+                </button>
+            </div>
 
             @if (!string.IsNullOrWhiteSpace(Message))
             {
-                <p class="form-success">@Message</p>
+                <p class="@messageClass">@Message</p>
             }
         </aside>
     </div>
@@ -66,15 +71,92 @@
 @code {
     [Parameter] public string? Slug { get; set; }
     [SupplyParameterFromQuery] public string? Mensagem { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
+    private string? replyText;
+    private IBrowserFile? selectedVideo;
+    private string? selectedVideoName;
+    private string? localMessage;
+    private string messageClass = "form-success";
+    private bool isSendingReply;
+    private bool isSendingVideo;
 
     private PracticeSubmission Practice => ContentStore.GetPractice(Slug ?? "fundamentos") ?? ContentStore.Practices[0];
     private bool HasFeedback => !string.IsNullOrWhiteSpace(Practice.FeedbackText);
-    private string ReplyAction => $"/aluno/praticas/{Practice.Slug}/responder";
-    private string VideoAction => $"/aluno/praticas/{Practice.Slug}/video";
-    private string? Message => Mensagem;
+    private string? Message => localMessage ?? Mensagem;
+    private bool CanSendVideo => selectedVideo is not null && !isSendingVideo;
 
     protected override void OnParametersSet()
     {
+        replyText ??= Practice.StudentReply;
         ContentStore.MarkFeedbackViewed(Practice.Slug);
+    }
+
+    private void SendReply()
+    {
+        if (string.IsNullOrWhiteSpace(replyText))
+        {
+            localMessage = "Escreva uma resposta antes de enviar.";
+            messageClass = "form-error";
+            return;
+        }
+
+        isSendingReply = true;
+        ContentStore.SaveStudentReply(Practice.Slug, replyText);
+        localMessage = "Resposta enviada ao professor.";
+        messageClass = "form-success";
+        isSendingReply = false;
+    }
+
+    private void SelectResponseVideo(InputFileChangeEventArgs args)
+    {
+        selectedVideo = args.File;
+        selectedVideoName = args.File.Name;
+        localMessage = "Vídeo selecionado. Clique em Enviar vídeo resposta para concluir.";
+        messageClass = "form-success";
+    }
+
+    private async Task SendVideoResponseAsync()
+    {
+        if (selectedVideo is null)
+        {
+            localMessage = "Selecione um vídeo antes de enviar.";
+            messageClass = "form-error";
+            return;
+        }
+
+        isSendingVideo = true;
+        localMessage = "Enviando vídeo. Aguarde a conclusão...";
+        messageClass = "form-success";
+
+        try
+        {
+            var studentName = await GetStudentNameAsync();
+            await ContentStore.SavePracticeVideoAsync(Practice.Slug, selectedVideo, studentName);
+            selectedVideo = null;
+            selectedVideoName = null;
+            localMessage = "Vídeo resposta enviado ao professor.";
+            messageClass = "form-success";
+        }
+        catch (Exception exception)
+        {
+            localMessage = $"Não foi possível enviar o vídeo: {exception.Message}";
+            messageClass = "form-error";
+        }
+        finally
+        {
+            isSendingVideo = false;
+        }
+    }
+
+    private async Task<string> GetStudentNameAsync()
+    {
+        if (AuthenticationStateTask is null)
+        {
+            return Practice.Student;
+        }
+
+        var authState = await AuthenticationStateTask;
+        return authState.User.Identity?.Name ?? Practice.Student;
     }
 }

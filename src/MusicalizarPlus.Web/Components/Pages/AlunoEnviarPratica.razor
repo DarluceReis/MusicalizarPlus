@@ -1,6 +1,7 @@
 @page "/aluno/aula/fundamentos/enviar"
 @page "/aluno/aula/{Slug}/enviar"
 @attribute [Authorize]
+@rendermode InteractiveServer
 @inject LearningContentStore ContentStore
 @inject NavigationManager Navigation
 
@@ -12,24 +13,88 @@
     <h2>Envie o vídeo da gravação com o resultado da sua prática da semana.</h2>
     <p>Sinta-se à vontade para expor suas <b>maiores dificuldades</b>, o que já está <b>dominando</b> e quais <b>dúvidas surgiram</b>.</p>
 
-    <form method="post" action="@($"/aluno/praticas/{Lesson.Slug}/video")" enctype="multipart/form-data" class="practice-upload-form">
+    <div class="practice-upload-form">
         <label class="upload-drop">
-            <input type="file" name="video" accept="video/*" required />
+            <InputFile OnChange="SelectVideo" accept="video/*" />
             <span class="upload-icon"></span>
-            <span>Enviar prática</span>
+            <span>@(selectedVideoName ?? "Selecionar vídeo da prática")</span>
         </label>
 
         <div class="upload-actions">
             <a class="outline" href="@($"aluno/pratica/{Lesson.Slug}")">Cancelar</a>
-            <button class="primary upload-confirm" type="submit">Confirmar envio</button>
+            <button class="primary upload-confirm" type="button" disabled="@(!CanSubmit)" @onclick="SubmitAsync">
+                @(isSaving ? "Enviando..." : "Confirmar envio")
+            </button>
         </div>
-    </form>
+
+        @if (!string.IsNullOrWhiteSpace(message))
+        {
+            <p class="@messageClass">@message</p>
+        }
+    </div>
 
     <footer>Suporte - Termos de Uso</footer>
 </section>
 
 @code {
     [Parameter] public string? Slug { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
+    private IBrowserFile? selectedVideo;
+    private string? selectedVideoName;
+    private string? message;
+    private string messageClass = "form-success";
+    private bool isSaving;
 
     private LessonContent Lesson => ContentStore.GetLesson(Slug ?? "fundamentos") ?? ContentStore.PublicLessons[0];
+    private bool CanSubmit => selectedVideo is not null && !isSaving;
+
+    private void SelectVideo(InputFileChangeEventArgs args)
+    {
+        selectedVideo = args.File;
+        selectedVideoName = args.File.Name;
+        message = "Vídeo selecionado. Clique em Confirmar envio para concluir.";
+        messageClass = "form-success";
+    }
+
+    private async Task SubmitAsync()
+    {
+        if (selectedVideo is null)
+        {
+            message = "Selecione um vídeo antes de enviar.";
+            messageClass = "form-error";
+            return;
+        }
+
+        isSaving = true;
+        message = "Enviando vídeo. Aguarde a conclusão...";
+        messageClass = "form-success";
+
+        try
+        {
+            var studentName = await GetStudentNameAsync();
+            await ContentStore.SavePracticeVideoAsync(Lesson.Slug, selectedVideo, studentName);
+            Navigation.NavigateTo($"aluno/pratica/{Lesson.Slug}?mensagem={Uri.EscapeDataString("Prática enviada ao professor.")}");
+        }
+        catch (Exception exception)
+        {
+            message = $"Não foi possível enviar o vídeo: {exception.Message}";
+            messageClass = "form-error";
+        }
+        finally
+        {
+            isSaving = false;
+        }
+    }
+
+    private async Task<string> GetStudentNameAsync()
+    {
+        if (AuthenticationStateTask is null)
+        {
+            return "João Alves";
+        }
+
+        var authState = await AuthenticationStateTask;
+        return authState.User.Identity?.Name ?? "João Alves";
+    }
 }
