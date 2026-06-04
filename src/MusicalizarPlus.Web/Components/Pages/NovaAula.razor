@@ -1,0 +1,35 @@
+@page "/professor/aulas/nova"
+@attribute [Authorize]
+@rendermode InteractiveServer
+@using System.Security.Claims
+
+<PageTitle>Adicionar nova aula</PageTitle>
+
+<section class="screen-panel professor-panel">
+    <AppHeader Mode="professor" ShowBack="true" HomeHref="professor/inicio" />
+    @if (lessonType is null)
+    {
+        <div class="choice-popover standalone compact-choice">
+            <button type="button" @onclick="() => lessonType = false">Aula privada <span>+</span></button>
+            <button type="button" @onclick="() => lessonType = true">Aula pública <span>+</span></button>
+        </div>
+    }
+    else
+    {
+        <LessonForm Title="@FormTitle" SaveText="Salvar" IsPublic="@lessonType.Value" ProfessorName="@professorName" />
+    }
+</section>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
+
+    private bool? lessonType;
+    private string professorName = "";
+    private string FormTitle => lessonType == true ? "Adicionar nova aula pública" : "Adicionar nova aula privada";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateTask;
+        professorName = authState.User.Identity?.Name ?? "";
+    }
+}

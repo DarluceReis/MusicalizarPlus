@@ -1,0 +1,56 @@
+@page "/professor/inicio"
+@attribute [Authorize]
+@rendermode InteractiveServer
+@inject LearningContentStore ContentStore
+
+<PageTitle>Professor</PageTitle>
+
+<section class="screen-panel professor-panel">
+    <AppHeader Mode="professor" HomeHref="professor/inicio" />
+    <h1>Visualize rapidamente suas aulas gerais e seus alunos</h1>
+    <h2>Aulas gerais postadas</h2>
+    <p class="lead">Acompanhe seus conteúdos e mantenha suas aulas atualizadas.</p>
+    @if (PublicLessons.Count == 0)
+    {
+        <p class="empty-state">Nenhuma aula pública publicada por este professor.</p>
+    }
+    else
+    {
+        <div class="teacher-carousel">
+            @foreach (var lesson in CarouselLessons)
+            {
+                <LessonTile Content="lesson" Href="@($"professor/aula/{lesson.Slug}")" />
+            }
+            @if (PublicLessons.Count > 3)
+            {
+                <button class="next-round" type="button" title="Carregar mais aulas" @onclick="NextLessons"></button>
+            }
+        </div>
+    }
+    <h2>Dicas da Musicalizar+</h2>
+    <div class="tip-box">Mantenha suas aulas atualizadas para facilitar a organização do estudo dos alunos. A inclusão de materiais complementares, como cifras e orientações práticas, ajuda a melhorar o desempenho dos estudantes.</div>
+    <div class="tip-box">Sempre verifique os vídeos enviados, pois o retorno oportuno contribui para o avanço técnico e para a motivação do aluno.</div>
+</section>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
+
+    private int carouselStart;
+    private string professorName = "";
+    private IReadOnlyList<LessonContent> PublicLessons => ContentStore.PublicLessonsForProfessor(professorName);
+
+    private IEnumerable<LessonContent> CarouselLessons =>
+        PublicLessons
+            .Skip(carouselStart)
+            .Concat(PublicLessons.Take(carouselStart))
+            .Take(3);
+
+    private void NextLessons() =>
+        carouselStart = (carouselStart + 3) % Math.Max(PublicLessons.Count, 1);
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateTask;
+        professorName = authState.User.Identity?.Name ?? "";
+    }
+}

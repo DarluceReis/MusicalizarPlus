@@ -1,0 +1,28 @@
+@inherits LayoutComponentBase
+@inject NavigationManager Navigation
+
+<div class="@LayoutClass">
+    @if (IsProfessorArea)
+    {
+        <aside class="professor-sidebar">
+            <NavMenu />
+        </aside>
+    }
+
+    <main class="app-main">
+        @Body
+    </main>
+</div>
+
+<div id="blazor-error-ui" data-nosnippet>
+    Ocorreu um erro inesperado.
+    <a href="." class="reload">Recarregar</a>
+    <span class="dismiss">x</span>
+</div>
+
+@code {
+    private string Path => new Uri(Navigation.Uri).AbsolutePath;
+    private bool IsProfessorArea => Path.StartsWith("/professor", StringComparison.OrdinalIgnoreCase);
+    private bool IsAuthArea => Path.StartsWith("/login", StringComparison.OrdinalIgnoreCase) || Path.StartsWith("/cadastro", StringComparison.OrdinalIgnoreCase);
+    private string LayoutClass => IsAuthArea ? "app-shell auth-shell" : IsProfessorArea ? "app-shell professor-shell" : "app-shell student-shell";
+}

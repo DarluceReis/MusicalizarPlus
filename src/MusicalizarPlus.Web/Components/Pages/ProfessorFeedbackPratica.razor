@@ -1,0 +1,73 @@
+@page "/professor/praticas/{Slug}"
+@attribute [Authorize]
+@inject LearningContentStore ContentStore
+
+<PageTitle>Feedback</PageTitle>
+
+<section class="screen-panel professor-panel">
+    <AppHeader Mode="professor" ShowBack="true" BackHref="professor/praticas" HomeHref="professor/inicio" />
+
+    @if (Practice is null)
+    {
+        <p class="form-error">Prática não encontrada para o professor logado.</p>
+    }
+    else
+    {
+        <div class="feedback-layout professor-feedback-layout">
+            <div>
+                <p class="eyebrow">Prática de @Practice.Student</p>
+                <h1>@Practice.Title</h1>
+                @if (Practice.VideoResponse is not null)
+                {
+                    <video class="video-player" controls preload="metadata" src="@($"/videos/praticas/{Practice.Slug}")"></video>
+                }
+                else
+                {
+                    <div class="video-hero @Practice.PhotoClass">
+                        <span class="play-button large" title="Play/Pause"></span>
+                        <div class="sound-wave" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+                    </div>
+                }
+            </div>
+
+            <aside class="feedback-card feedback-editor">
+                <strong>Feedback do professor</strong>
+                <p>Escreva um retorno claro para o aluno revisar junto com o vídeo.</p>
+                <form method="post" action="@($"/professor/praticas/{Practice.Slug}/feedback")" class="feedback-response-form">
+                    <textarea name="feedback" placeholder="Ex.: Ótima evolução no ritmo. Revise a troca entre Em e G com metrônomo lento.">@Practice.FeedbackText</textarea>
+                    <button class="primary" type="submit">Salvar feedback</button>
+                </form>
+                @if (!string.IsNullOrWhiteSpace(Practice.StudentReply))
+                {
+                    <div class="reply-box">
+                        <strong>Resposta do aluno</strong>
+                        <p>@Practice.StudentReply</p>
+                    </div>
+                }
+                @if (!string.IsNullOrWhiteSpace(Mensagem))
+                {
+                    <p class="form-success">@Mensagem</p>
+                }
+            </aside>
+        </div>
+    }
+</section>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
+    [Parameter] public string? Slug { get; set; }
+    [SupplyParameterFromQuery] public string? Mensagem { get; set; }
+
+    private PracticeSubmission? Practice { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var authState = await AuthenticationStateTask;
+        var professorName = authState.User.Identity?.Name ?? "";
+        Practice = ContentStore.GetPracticeForProfessor(Slug ?? "fundamentos", professorName);
+        if (Practice is not null)
+        {
+            ContentStore.MarkPracticeViewed(Practice.Slug);
+        }
+    }
+}

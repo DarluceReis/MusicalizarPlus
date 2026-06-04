@@ -1,0 +1,45 @@
+@page "/professor/alunos"
+@attribute [Authorize]
+@rendermode InteractiveServer
+@inject LearningContentStore ContentStore
+
+<PageTitle>Visualizar alunos</PageTitle>
+
+<section class="screen-panel professor-panel scroll-panel">
+    <AppHeader Mode="professor" ShowBack="true" HomeHref="professor/inicio" />
+    <div class="list-title-row searchable-title">
+        <h1>Visualizar alunos</h1>
+        <label class="compact-search">
+            Buscar
+            <input @bind="searchTerm" @bind:event="oninput" />
+        </label>
+    </div>
+    <div class="student-grid">
+        @foreach (var student in FilteredStudents)
+        {
+            <StudentTile Student="student" />
+        }
+    </div>
+    @if (!FilteredStudents.Any())
+    {
+        <p class="empty-state">Nenhum aluno vinculado a este professor.</p>
+    }
+</section>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
+
+    private string searchTerm = "";
+    private string professorName = "";
+
+    private IEnumerable<StudentCard> FilteredStudents =>
+        ContentStore.StudentsForProfessor(professorName).Where(student =>
+            string.IsNullOrWhiteSpace(searchTerm)
+            || student.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateTask;
+        professorName = authState.User.Identity?.Name ?? "";
+    }
+}

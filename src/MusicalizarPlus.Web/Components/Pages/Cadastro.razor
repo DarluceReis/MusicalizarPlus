@@ -1,0 +1,58 @@
+﻿@page "/cadastro"
+@attribute [AllowAnonymous]
+
+<PageTitle>Criar conta</PageTitle>
+
+<section class="auth-page cadastro-page">
+    <div class="auth-card create-card">
+        <a class="brand auth-brand" href="login">
+            <Logo />
+        </a>
+
+        <h1>Criar conta</h1>
+
+        <form action="/auth/register" method="post" class="auth-form">
+            <label for="tipo">Função</label>
+            <select id="tipo" name="tipo">
+                <option value="ALUNO">Aluno</option>
+                <option value="PROFESSOR">Professor</option>
+            </select>
+
+            <label for="nome">Nome</label>
+            <input id="nome" name="nome" autocomplete="name" required />
+
+            <label for="email">E-mail</label>
+            <input id="email" name="email" type="email" autocomplete="email" required />
+
+            <label for="senha">Senha</label>
+            <span class="password-wrap">
+                <input id="senha" name="senha" type="password" autocomplete="new-password" required />
+                <button class="eye-button" type="button" data-toggle-password="senha" aria-label="Mostrar senha"></button>
+            </span>
+
+            <label for="confirmarSenha">Confirmar senha</label>
+            <span class="password-wrap">
+                <input id="confirmarSenha" name="confirmarSenha" type="password" autocomplete="new-password" required />
+                <button class="eye-button" type="button" data-toggle-password="confirmarSenha" aria-label="Mostrar senha"></button>
+            </span>
+
+            <small>Estou ciente e concordo com os <a>Termos de Uso</a> e com as <a>Políticas</a> da Musicalizar+.</small>
+            <button class="primary" type="submit">Criar conta</button>
+        </form>
+
+        <p class="auth-switch">Já tem uma conta? <a href="login">Acesse aqui</a></p>
+
+        @if (!string.IsNullOrWhiteSpace(Erro))
+        {
+            <p class="form-error">@Erro</p>
+        }
+
+        <footer>Suporte - Termos de Uso</footer>
+    </div>
+    <div class="auth-image"></div>
+</section>
+
+@code {
+    [SupplyParameterFromQuery(Name = "erro")]
+    public string? Erro { get; set; }
+}

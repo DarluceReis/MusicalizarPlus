@@ -1,0 +1,62 @@
+@page "/professor/aulas/editar"
+@attribute [Authorize]
+@rendermode InteractiveServer
+@inject LearningContentStore ContentStore
+
+<PageTitle>Editar aulas</PageTitle>
+
+<section class="screen-panel professor-panel scroll-panel">
+    <AppHeader Mode="professor" ShowBack="true" HomeHref="professor/inicio" />
+    @if (selectedType is null)
+    {
+        <div class="edit-choice">
+            <button type="button" @onclick="() => SelectType(false)">Aula personalizada</button>
+            <button type="button" @onclick="() => SelectType(true)">Aula geral</button>
+        </div>
+    }
+    else
+    {
+        <div class="teacher-title-row">
+            <h1>@Title</h1>
+            @if (selectedType == false)
+            {
+                <select @bind="studentName">
+                    @foreach (var student in ContentStore.StudentsForProfessor(professorName))
+                    {
+                        <option>@student.Name</option>
+                    }
+                </select>
+            }
+        </div>
+        <div class="lesson-grid edit-grid">
+            @foreach (var lesson in Lessons)
+            {
+                <LessonTile Content="lesson" ShowPlay="false" Href="@($"professor/aulas/editar/{lesson.Slug}")" />
+            }
+        </div>
+    }
+</section>
+
+@code {
+    private bool? selectedType;
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
+
+    private string studentName = "";
+    private string professorName = "";
+
+    private string Title => selectedType == true ? "Editar aulas gerais" : "Editar aulas personalizadas";
+
+    private IEnumerable<LessonContent> Lessons =>
+        selectedType == true
+            ? ContentStore.PublicLessonsForProfessor(professorName)
+            : ContentStore.PrivateLessonsFor(professorName, studentName);
+
+    private void SelectType(bool isPublic) => selectedType = isPublic;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateTask;
+        professorName = authState.User.Identity?.Name ?? "";
+        studentName = ContentStore.StudentsForProfessor(professorName).FirstOrDefault()?.Name ?? "";
+    }
+}

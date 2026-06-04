@@ -1,0 +1,15 @@
+@page "/professor/cursos"
+@attribute [Authorize]
+
+<PageTitle>Listar cursos</PageTitle>
+
+<section class="screen-panel professor-panel">
+    <AppHeader Mode="professor" ShowBack="true" HomeHref="professor/inicio" />
+    <h1>Listar cursos</h1>
+    <div class="lesson-grid">
+        @foreach (var lesson in DemoCatalog.GeneralLessons)
+        {
+            <LessonTile Lesson="lesson" ShowPlay="false" Href="professor/aulas/editar/form" />
+        }
+    </div>
+</section>

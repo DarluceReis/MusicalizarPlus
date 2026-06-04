@@ -1,0 +1,80 @@
+@page "/aluno/pratica/fundamentos"
+@page "/aluno/pratica/{Slug}"
+@attribute [Authorize]
+@inject LearningContentStore ContentStore
+
+<PageTitle>Prática - @Practice.Title</PageTitle>
+
+<section class="screen-panel student-panel">
+    <AppHeader Mode="student" />
+    <h1>Prática - @Practice.Title</h1>
+    <p class="lead">Acompanhe por aqui o feedback do seu professor.</p>
+
+    <div class="feedback-layout">
+        @if (Practice.VideoResponse is not null)
+        {
+            <video class="video-player" controls preload="metadata" src="@($"/videos/praticas/{Practice.Slug}")"></video>
+        }
+        else
+        {
+            <div class="video-hero @Practice.PhotoClass">
+                <span class="play-button large" title="Play/Pause"></span>
+            </div>
+        }
+
+        <aside class="feedback-card">
+            <strong>Feedback:</strong>
+            @if (HasFeedback)
+            {
+                <div class="feedback-teacher">
+                    <div class="avatar avatar-professor"></div>
+                    <div>
+                        <small>@Practice.FeedbackAt?.ToString("dd/MM/yyyy HH:mm")</small>
+                        <b>Professor @Practice.FeedbackProfessor?.Split(' ')[0]</b>
+                    </div>
+                </div>
+                <p>@Practice.FeedbackText</p>
+
+                <form method="post" action="@ReplyAction" class="feedback-response-form">
+                    <textarea class="reply-textarea" name="resposta" placeholder="Escreva sua resposta ao professor">@Practice.StudentReply</textarea>
+                    <button class="primary" type="submit">Responder feedback</button>
+                </form>
+            }
+            else
+            {
+                <p>Aguardando avaliação do professor.</p>
+            }
+
+            <form method="post" action="@VideoAction" enctype="multipart/form-data" class="feedback-response-form">
+                <label class="compact-file">
+                    <span>Selecionar vídeo</span>
+                    <input type="file" name="video" accept="video/*" required />
+                </label>
+                <button class="primary" type="submit">Enviar vídeo resposta</button>
+            </form>
+
+            @if (!string.IsNullOrWhiteSpace(Message))
+            {
+                <p class="form-success">@Message</p>
+            }
+        </aside>
+    </div>
+
+    <footer>Suporte - Termos de Uso</footer>
+</section>
+
+@code {
+    [Parameter] public string? Slug { get; set; }
+    [SupplyParameterFromQuery] public string? Mensagem { get; set; }
+
+    private PracticeSubmission Practice => ContentStore.GetPractice(Slug ?? "fundamentos") ?? ContentStore.Practices[0];
+    private bool HasFeedback => !string.IsNullOrWhiteSpace(Practice.FeedbackText);
+    private string ReplyAction => $"/aluno/praticas/{Practice.Slug}/responder";
+    private string VideoAction => $"/aluno/praticas/{Practice.Slug}/video";
+    private string? Message => Mensagem;
+
+    protected override void OnParametersSet()
+    {
+        ContentStore.MarkFeedbackViewed(Practice.Slug);
+    }
+}

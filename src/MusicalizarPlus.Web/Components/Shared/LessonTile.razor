@@ -1,0 +1,29 @@
+<a class="lesson-tile" href="@ResolvedHref">
+    <strong>@Title</strong>
+    <div class="photo @PhotoClass">
+        @if (Content?.Video is not null)
+        {
+            <video class="tile-video-preview" preload="metadata" muted playsinline src="@($"/videos/aulas/{Slug}")"></video>
+        }
+        @if (ShowPlay)
+        {
+            <span class="play-button"></span>
+        }
+    </div>
+    <p><b>Descrição:</b> @Description</p>
+    <p><b>Nível:</b> @Level</p>
+</a>
+
+@code {
+    [Parameter] public LessonCard? Lesson { get; set; }
+    [Parameter] public LessonContent? Content { get; set; }
+    [Parameter] public string? Href { get; set; }
+    [Parameter] public bool ShowPlay { get; set; } = true;
+
+    private string Slug => Content?.Slug ?? Lesson?.Slug ?? "";
+    private string Title => Content?.Title ?? Lesson?.Title ?? "";
+    private string Description => Content?.Description ?? Lesson?.Description ?? "";
+    private string Level => Content?.Level ?? Lesson?.Level ?? "";
+    private string PhotoClass => Content?.PhotoClass ?? Lesson?.PhotoClass ?? "";
+    private string ResolvedHref => Href ?? $"aluno/aula/{Slug}";
+}

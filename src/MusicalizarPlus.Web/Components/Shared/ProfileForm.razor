@@ -1,0 +1,344 @@
+﻿@inject MusicalizarPlusApiClient Api
+@inject IJSRuntime Js
+@inject ProfilePreferencesStore PreferencesStore
+@inject NavigationManager Navigation
+
+<section class="profile-box">
+    <div class="profile-main">
+        <div class="form-grid">
+            <label>
+                Nome
+                <input @bind="nome" />
+            </label>
+            <label>
+                Pronome
+                <select @bind="pronome">
+                    <option>Ele/dele</option>
+                    <option>Ela/dela</option>
+                    <option>Elu/delu</option>
+                    <option>Prefiro não informar</option>
+                </select>
+            </label>
+            <label>
+                E-mail
+                <input class="@(emailUnlocked ? null : "disabled-field")" @bind="email" disabled="@(!emailUnlocked)" type="email" />
+            </label>
+            <label>
+                @ThirdLabel
+                @if (IsTeachingProfile)
+                {
+                    <div class="check-grid">
+                        @foreach (var option in LevelOptions)
+                        {
+                            <label><input type="checkbox" checked="@selectedLevels.Contains(option)" @onchange="eventArgs => ToggleSelection(selectedLevels, option, eventArgs)" /> @option</label>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <select @bind="nivel">
+                        @foreach (var option in LevelOptions)
+                        {
+                            <option>@option</option>
+                        }
+                    </select>
+                }
+            </label>
+            <label>
+                @FourthLabel
+                @if (IsTeachingProfile)
+                {
+                    <div class="check-grid">
+                        @foreach (var option in InstrumentOptions)
+                        {
+                            <label><input type="checkbox" checked="@selectedInstruments.Contains(option)" @onchange="eventArgs => ToggleSelection(selectedInstruments, option, eventArgs)" /> @option</label>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <select @bind="instrumento" disabled="@FourthDisabled">
+                        @foreach (var option in InstrumentOptions)
+                        {
+                            <option>@option</option>
+                        }
+                    </select>
+                }
+            </label>
+            <label>
+                @FifthLabel
+                @if (IsPhoneField)
+                {
+                    <input @bind="telefone" type="tel" placeholder="+55 (00) 00000-0000" />
+                }
+                else
+                {
+                    <select @bind="professor" disabled="@(!professorUnlocked)" class="@(!professorUnlocked ? "disabled-field" : null)">
+                        @foreach (var option in ProfessorOptions)
+                        {
+                            <option>@option</option>
+                        }
+                    </select>
+                }
+            </label>
+        </div>
+        <div class="profile-links">
+            <button type="button" @onclick="TogglePasswordEditor">Alterar senha</button>
+            <button type="button" @onclick="UnlockEmail">Alterar e-mail</button>
+            @if (ShowThirdLink)
+            {
+                <button type="button" @onclick="UnlockProfessor">Alterar professor</button>
+            }
+            <a href="auth/logout">Deslogar</a>
+        </div>
+
+        @if (showPasswordEditor)
+        {
+            <div class="profile-action-panel">
+                <label>
+                    Senha atual
+                    <span class="password-wrap">
+                        <input id="@CurrentPasswordInputId" type="password" @bind="senhaAtual" autocomplete="current-password" />
+                        <button class="eye-button" type="button" data-toggle-password="@CurrentPasswordInputId" aria-label="Mostrar senha"></button>
+                    </span>
+                </label>
+                <label>
+                    Nova senha
+                    <span class="password-wrap">
+                        <input id="@NewPasswordInputId" type="password" @bind="novaSenha" autocomplete="new-password" />
+                        <button class="eye-button" type="button" data-toggle-password="@NewPasswordInputId" aria-label="Mostrar senha"></button>
+                    </span>
+                </label>
+                <label>
+                    Confirmar senha
+                    <span class="password-wrap">
+                        <input id="@ConfirmPasswordInputId" type="password" @bind="confirmarSenha" autocomplete="new-password" />
+                        <button class="eye-button" type="button" data-toggle-password="@ConfirmPasswordInputId" aria-label="Mostrar senha"></button>
+                    </span>
+                </label>
+                <button class="primary" type="button" @onclick="ChangePasswordAsync">Salvar senha</button>
+            </div>
+        }
+    </div>
+
+    <div class="profile-side">
+        <div class="profile-photo-card">
+            <strong>Foto de perfil</strong>
+            <div id="@PhotoElementId" class="avatar @AvatarClass profile-avatar-preview"></div>
+            <div class="photo-actions">
+                <label>
+                    Alterar
+                    <input type="file" accept="image/*" data-profile-photo-key="@PhotoStorageKey" data-profile-photo-target="@PhotoElementId" onchange="musicalizarProfile.choosePhoto(event)" />
+                </label>
+                <span>|</span>
+                <button type="button" data-profile-photo-key="@PhotoStorageKey" data-profile-photo-target="@PhotoElementId" onclick="musicalizarProfile.removePhoto(event)">Remover</button>
+            </div>
+        </div>
+        <button class="primary wide-save" type="button" @onclick="SaveProfileAsync">Salvar</button>
+    </div>
+</section>
+
+@if (!string.IsNullOrWhiteSpace(message))
+{
+    <p class="form-success profile-message">@message</p>
+}
+
+@if (!string.IsNullOrWhiteSpace(error))
+{
+    <p class="form-error profile-message">@error</p>
+}
+
+@code {
+    private static readonly string[] LevelOptions = ["Iniciante", "Básico", "Intermediário", "Avançado"];
+    private static readonly string[] InstrumentOptions = ["Violão", "Viola", "Guitarra", "Baixo", "Cavaquinho"];
+    private static readonly string[] ProfessorOptions = [LearningContentStore.DemoProfessorName];
+
+    [Parameter] public int UserId { get; set; }
+    [Parameter] public string Name { get; set; } = "";
+    [Parameter] public string Email { get; set; } = "";
+    [Parameter] public string ThirdLabel { get; set; } = "Nível";
+    [Parameter] public string ThirdValue { get; set; } = "Iniciante";
+    [Parameter] public string FourthLabel { get; set; } = "Instrumento";
+    [Parameter] public string FourthValue { get; set; } = "Violão";
+    [Parameter] public bool FourthDisabled { get; set; }
+    [Parameter] public string FifthLabel { get; set; } = "Professor";
+    [Parameter] public string FifthValue { get; set; } = LearningContentStore.DemoProfessorName;
+    [Parameter] public bool FifthDisabled { get; set; }
+    [Parameter] public string AvatarClass { get; set; } = "avatar-joao";
+    [Parameter] public bool ShowThirdLink { get; set; }
+
+    private bool initialized;
+    private bool emailUnlocked;
+    private bool professorUnlocked;
+    private bool showPasswordEditor;
+    private string nome = "";
+    private string email = "";
+    private string pronome = "Ele/dele";
+    private string nivel = "Iniciante";
+    private string instrumento = "Violão";
+    private string professor = LearningContentStore.DemoProfessorName;
+    private string telefone = "";
+    private string senhaAtual = "";
+    private string novaSenha = "";
+    private string confirmarSenha = "";
+    private string? message;
+    private string? error;
+    private readonly HashSet<string> selectedLevels = ["Iniciante", "Intermediário", "Avançado"];
+    private readonly HashSet<string> selectedInstruments = ["Violão", "Viola"];
+    private bool IsTeachingProfile => ThirdLabel.StartsWith("Níveis", StringComparison.OrdinalIgnoreCase) || FourthLabel.StartsWith("Instrumentos", StringComparison.OrdinalIgnoreCase);
+    private bool IsPhoneField => FifthLabel.StartsWith("Telefone", StringComparison.OrdinalIgnoreCase);
+
+    protected override void OnParametersSet()
+    {
+        if (initialized)
+        {
+            return;
+        }
+
+        nome = Name;
+        email = Email;
+        nivel = ThirdValue;
+        instrumento = FourthValue;
+        professor = IsPhoneField ? LearningContentStore.DemoProfessorName : FifthValue;
+        telefone = IsPhoneField ? FifthValue : "";
+        if (UserId > 0)
+        {
+            var preferences = PreferencesStore.Get(UserId);
+            pronome = preferences.Pronoun;
+            nivel = preferences.Level;
+            instrumento = preferences.Instrument;
+            professor = preferences.Professor;
+            telefone = preferences.Phone;
+            selectedLevels.Clear();
+            selectedInstruments.Clear();
+            foreach (var level in preferences.TeachingLevels)
+            {
+                selectedLevels.Add(level);
+            }
+            foreach (var instrument in preferences.TeachingInstruments)
+            {
+                selectedInstruments.Add(instrument);
+            }
+        }
+        initialized = true;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender || UserId <= 0)
+        {
+            return;
+        }
+
+        try
+        {
+            await Js.InvokeVoidAsync("musicalizarProfile.initPhoto", PhotoElementId, PhotoStorageKey);
+        }
+        catch (JSException)
+        {
+            // The next hard refresh loads the current app.js if the browser still has an old asset cached.
+        }
+    }
+
+    private void TogglePasswordEditor()
+    {
+        ClearMessages();
+        showPasswordEditor = !showPasswordEditor;
+    }
+
+    private void UnlockEmail()
+    {
+        ClearMessages();
+        emailUnlocked = true;
+        message = "Edite o e-mail no campo acima e clique em Salvar.";
+    }
+
+    private void UnlockProfessor()
+    {
+        ClearMessages();
+        professorUnlocked = true;
+        message = "Escolha o novo professor e clique em Salvar.";
+    }
+
+    private async Task SaveProfileAsync()
+    {
+        ClearMessages();
+
+        if (UserId <= 0)
+        {
+            error = "Não foi possível identificar o usuário logado.";
+            return;
+        }
+
+        var result = await Api.AtualizarUsuarioAsync(UserId, new AtualizarUsuarioRequest(nome, email));
+        if (!result.IsSuccess || result.Value is null)
+        {
+            error = result.Error ?? "Não foi possível salvar os dados.";
+            return;
+        }
+
+        nome = result.Value.Nome;
+        email = result.Value.Email;
+        PreferencesStore.Save(UserId, new ProfilePreferences
+        {
+            Pronoun = pronome,
+            Level = nivel,
+            Instrument = instrumento,
+            Professor = professor,
+            Phone = telefone,
+            TeachingLevels = selectedLevels.ToList(),
+            TeachingInstruments = selectedInstruments.ToList()
+        });
+        emailUnlocked = false;
+        professorUnlocked = false;
+        message = "Dados salvos com sucesso.";
+        Navigation.NavigateTo($"/auth/refresh-name?nome={Uri.EscapeDataString(nome)}&email={Uri.EscapeDataString(email)}", forceLoad: true);
+    }
+
+    private async Task ChangePasswordAsync()
+    {
+        ClearMessages();
+
+        if (UserId <= 0)
+        {
+            error = "Não foi possível identificar o usuário logado.";
+            return;
+        }
+
+        var result = await Api.AlterarSenhaAsync(UserId, new AlterarSenhaUsuarioRequest(senhaAtual, novaSenha, confirmarSenha));
+        if (!result.IsSuccess)
+        {
+            error = result.Error ?? "Não foi possível alterar a senha.";
+            return;
+        }
+
+        senhaAtual = "";
+        novaSenha = "";
+        confirmarSenha = "";
+        showPasswordEditor = false;
+        message = "Senha alterada com sucesso.";
+    }
+
+    private void ClearMessages()
+    {
+        message = null;
+        error = null;
+    }
+
+    private static void ToggleSelection(HashSet<string> values, string value, ChangeEventArgs eventArgs)
+    {
+        if (eventArgs.Value is true)
+        {
+            values.Add(value);
+            return;
+        }
+
+        values.Remove(value);
+    }
+
+    private string PhotoStorageKey => $"musicalizarplus.profile.photo.{UserId}";
+    private string PhotoElementId => $"profile-photo-{UserId}";
+    private string CurrentPasswordInputId => $"senha-atual-{UserId}";
+    private string NewPasswordInputId => $"nova-senha-{UserId}";
+    private string ConfirmPasswordInputId => $"confirmar-senha-{UserId}";
+}

@@ -1,0 +1,29 @@
+@page "/aluno/historico"
+@attribute [Authorize]
+@inject LearningContentStore ContentStore
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<PageTitle>Histórico de Práticas</PageTitle>
+
+<section class="screen-panel student-panel">
+    <AppHeader Mode="student" />
+    <h1>Histórico de Práticas</h1>
+    <p class="lead">Acompanhe suas gravações enviadas, feedbacks e veja a evolução do seu aprendizado.</p>
+    <div class="history-grid">
+        @foreach (var practice in ContentStore.PracticesForStudent(studentName))
+        {
+            <PracticeTile Practice="practice" />
+        }
+    </div>
+    <footer>Suporte - Termos de Uso</footer>
+</section>
+
+@code {
+    private string studentName = "João Alves";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        studentName = state.User.Identity?.Name ?? studentName;
+    }
+}

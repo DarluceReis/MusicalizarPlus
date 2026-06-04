@@ -1,0 +1,35 @@
+@page "/aluno/aula/fundamentos/enviar"
+@page "/aluno/aula/{Slug}/enviar"
+@attribute [Authorize]
+@inject LearningContentStore ContentStore
+@inject NavigationManager Navigation
+
+<PageTitle>Enviar prática</PageTitle>
+
+<section class="screen-panel student-panel">
+    <AppHeader Mode="student" ShowBack="true" BackHref="@($"aluno/pratica/{Lesson.Slug}")" />
+    <h1>Aula: @Lesson.Title</h1>
+    <h2>Envie o vídeo da gravação com o resultado da sua prática da semana.</h2>
+    <p>Sinta-se à vontade para expor suas <b>maiores dificuldades</b>, o que já está <b>dominando</b> e quais <b>dúvidas surgiram</b>.</p>
+
+    <form method="post" action="@($"/aluno/praticas/{Lesson.Slug}/video")" enctype="multipart/form-data" class="practice-upload-form">
+        <label class="upload-drop">
+            <input type="file" name="video" accept="video/*" required />
+            <span class="upload-icon"></span>
+            <span>Enviar prática</span>
+        </label>
+
+        <div class="upload-actions">
+            <a class="outline" href="@($"aluno/pratica/{Lesson.Slug}")">Cancelar</a>
+            <button class="primary upload-confirm" type="submit">Confirmar envio</button>
+        </div>
+    </form>
+
+    <footer>Suporte - Termos de Uso</footer>
+</section>
+
+@code {
+    [Parameter] public string? Slug { get; set; }
+
+    private LessonContent Lesson => ContentStore.GetLesson(Slug ?? "fundamentos") ?? ContentStore.PublicLessons[0];
+}

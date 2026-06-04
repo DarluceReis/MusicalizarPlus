@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="src/MusicalizarPlus.Api/MusicalizarPlus.Api.csproj" />
+  <Project Path="src/MusicalizarPlus.Application/MusicalizarPlus.Application.csproj" />
+  <Project Path="src/MusicalizarPlus.Contracts/MusicalizarPlus.Contracts.csproj" />
+  <Project Path="src/MusicalizarPlus.Domain/MusicalizarPlus.Domain.csproj" />
+  <Project Path="src/MusicalizarPlus.Infrastructure/MusicalizarPlus.Infrastructure.csproj" />
+  <Project Path="src/MusicalizarPlus.Web/MusicalizarPlus.Web.csproj" />
+</Solution>

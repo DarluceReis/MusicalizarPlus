@@ -1,0 +1,56 @@
+﻿@page "/login"
+@attribute [AllowAnonymous]
+@inject NavigationManager Navigation
+
+<PageTitle>Entrar</PageTitle>
+
+<section class="auth-page login-page">
+    <div class="auth-card login-card">
+        <a class="brand auth-brand" href="login">
+            <Logo />
+        </a>
+
+        <div class="login-spacer"></div>
+        <h1>Entrar</h1>
+
+        <form action="/auth/login" method="post" class="auth-form">
+            <label for="email">E-mail</label>
+            <input id="email" name="email" type="email" autocomplete="email" required />
+
+            <label for="senha">Senha</label>
+            <span class="password-wrap">
+                <input id="senha" name="senha" type="password" autocomplete="current-password" required />
+                <button class="eye-button" type="button" data-toggle-password="senha" aria-label="Mostrar senha"></button>
+            </span>
+
+            <button class="primary" type="submit">Entrar</button>
+        </form>
+
+        <p class="auth-switch">Não tem uma conta? <a href="cadastro">Criar conta</a></p>
+
+        @if (!string.IsNullOrWhiteSpace(Erro))
+        {
+            <p class="form-error">@Erro</p>
+        }
+
+        <footer>Suporte - Termos de Uso</footer>
+    </div>
+    <div class="auth-image"></div>
+</section>
+
+@code {
+    [SupplyParameterFromQuery(Name = "erro")]
+    public string? Erro { get; set; }
+
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateTask;
+        if (authState.User.Identity?.IsAuthenticated == true)
+        {
+            var isProfessor = authState.User.IsInRole("PROFESSOR");
+            Navigation.NavigateTo(isProfessor ? "/professor/inicio" : "/aluno/aulas", forceLoad: true);
+        }
+    }
+}

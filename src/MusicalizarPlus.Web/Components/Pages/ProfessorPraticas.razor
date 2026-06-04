@@ -1,0 +1,69 @@
+@page "/professor/praticas"
+@attribute [Authorize]
+@rendermode InteractiveServer
+@inject LearningContentStore ContentStore
+
+<PageTitle>Ver práticas</PageTitle>
+
+<section class="screen-panel professor-panel scroll-panel">
+    <AppHeader Mode="professor" ShowBack="true" HomeHref="professor/inicio" />
+    <div class="list-title-row">
+        <h1>Ver práticas</h1>
+        <select class="filter-select" @bind="filter">
+            <option value="">Todos</option>
+            <option value="novas">Novas</option>
+            <option value="respondidas">Respondidas</option>
+        </select>
+    </div>
+    <div class="student-grid">
+        @foreach (var practice in FilteredPractices)
+        {
+            <a class="student-tile practice-summary" href="professor/praticas/@practice.Slug">
+                @if (practice.HasNewActivity || practice.HasNewReplyForProfessor)
+                {
+                    <span class="alert-dot">1</span>
+                }
+                <div class="practice-thumb @practice.PhotoClass">
+                    @if (practice.VideoResponse is not null)
+                    {
+                        <video class="tile-video-preview" preload="metadata" muted playsinline src="@($"/videos/praticas/{practice.Slug}")"></video>
+                    }
+                    <span class="play-button"></span>
+                </div>
+                <div>
+                    <h3>@practice.Title</h3>
+                    <p>Envio: @practice.Date</p>
+                    <h3>@practice.Student</h3>
+                    <p>Nível: @practice.Level</p>
+                    <p>Instrumento: @practice.Instrument</p>
+                </div>
+            </a>
+        }
+    </div>
+    @if (!FilteredPractices.Any())
+    {
+        <p class="empty-state">Nenhuma prática vinculada a este professor.</p>
+    }
+</section>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
+
+    private string filter = "";
+    private string professorName = "";
+
+    private IEnumerable<PracticeSubmission> ProfessorPractices => ContentStore.PracticesForProfessor(professorName);
+
+    private IEnumerable<PracticeSubmission> FilteredPractices => filter switch
+    {
+        "novas" => ProfessorPractices.Where(practice => practice.HasNewActivity || practice.HasNewReplyForProfessor),
+        "respondidas" => ProfessorPractices.Where(practice => !string.IsNullOrWhiteSpace(practice.StudentReply)),
+        _ => ProfessorPractices
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateTask;
+        professorName = authState.User.Identity?.Name ?? "";
+    }
+}

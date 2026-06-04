@@ -1,0 +1,16 @@
+.vs/
+bin/
+obj/
+logs/
+artifacts/
+/MusicalizarPlus/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+appsettings.Development.json
+.aspnet-data-protection/
+src/**/bin/
+src/**/obj/
+src/**/.aspnet-data-protection/
+src/**/appsettings.Development.json

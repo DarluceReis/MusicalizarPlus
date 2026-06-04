@@ -1,0 +1,49 @@
+﻿@page "/aluno/dados"
+@attribute [Authorize]
+@using System.Security.Claims
+@rendermode InteractiveServer
+@inject MusicalizarPlusApiClient Api
+
+<PageTitle>Meus dados</PageTitle>
+
+<section class="screen-panel student-panel">
+    <AppHeader Mode="student" />
+    <h1>Meus dados</h1>
+    <ProfileForm UserId="@UserId"
+                 Name="@Nome"
+                 Email="@Email"
+                 ThirdLabel="Nível"
+                 ThirdValue="Iniciante"
+                 FourthLabel="Instrumento"
+                 FourthValue="Violão"
+                 FifthLabel="Professor"
+                 FifthValue="@LearningContentStore.DemoProfessorName"
+                 FifthDisabled="true"
+                 AvatarClass="avatar-joao"
+                 ShowThirdLink="true" />
+    <footer>Suporte - Termos de Uso</footer>
+</section>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
+
+    private string Nome { get; set; } = "";
+    private string Email { get; set; } = "";
+    private int UserId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateTask;
+        Nome = authState.User.Identity?.Name ?? "";
+        Email = authState.User.FindFirstValue(ClaimTypes.Email) ?? "";
+        int.TryParse(authState.User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId);
+        UserId = userId;
+
+        var usuario = UserId > 0 ? await Api.ObterUsuarioAsync(UserId) : null;
+        if (usuario is not null)
+        {
+            Nome = usuario.Nome;
+            Email = usuario.Email;
+        }
+    }
+}

@@ -1,0 +1,112 @@
+@inject LearningContentStore ContentStore
+
+<div class="lesson-form-wrap">
+    <h1>@Title</h1>
+    <EditForm Model="draft" OnSubmit="SaveAsync" class="lesson-form">
+        @if (!IsPublic)
+        {
+            <label>
+                Aluno
+                <select @bind="draft.StudentName">
+                    @foreach (var student in Students)
+                    {
+                        <option>@student.Name</option>
+                    }
+                </select>
+            </label>
+        }
+        <label>Título<input @bind="draft.Title" required /></label>
+        <label>Descrição<input @bind="draft.Description" required /></label>
+        <label>
+            Nível
+            <select @bind="draft.Level">
+                <option>Iniciante</option>
+                <option>Básico</option>
+                <option>Intermediário</option>
+                <option>Avançado</option>
+            </select>
+        </label>
+        <div class="attach-row">
+            <label class="attach-button">
+                <InputFile OnChange="SelectMaterial" />
+                <span class="upload-icon"></span>
+                @(materialName ?? "Anexar material")
+            </label>
+            <label class="attach-button">
+                <InputFile OnChange="SelectVideo" accept="video/*" />
+                <span class="upload-icon"></span>
+                @(videoName ?? "Anexar aula")
+            </label>
+        </div>
+        <div class="form-actions">
+            <a href="professor/inicio">Cancelar</a>
+            @if (Editing)
+            {
+                <button class="outline" type="button">Excluir aula</button>
+            }
+            <button class="primary" type="submit">@SaveText</button>
+        </div>
+        @if (!string.IsNullOrWhiteSpace(message))
+        {
+            <p class="@messageClass">@message</p>
+        }
+    </EditForm>
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; } = "Editar aula";
+    [Parameter] public string SaveText { get; set; } = "Salvar";
+    [Parameter] public bool Editing { get; set; }
+    [Parameter] public bool IsPublic { get; set; }
+    [Parameter] public string ProfessorName { get; set; } = LearningContentStore.DemoProfessorName;
+
+    private readonly LessonDraft draft = new();
+    private string? materialName;
+    private string? videoName;
+    private string? message;
+    private string messageClass = "form-success";
+
+    protected override void OnParametersSet()
+    {
+        draft.IsPublic = IsPublic;
+        draft.ProfessorName = ProfessorName;
+        draft.StudentName ??= Students.FirstOrDefault()?.Name;
+    }
+
+    private IReadOnlyList<StudentCard> Students => ContentStore.StudentsForProfessor(ProfessorName);
+
+    private void SelectMaterial(InputFileChangeEventArgs args)
+    {
+        draft.Material = args.File;
+        materialName = args.File.Name;
+        message = null;
+    }
+
+    private void SelectVideo(InputFileChangeEventArgs args)
+    {
+        draft.Video = args.File;
+        videoName = args.File.Name;
+        message = null;
+    }
+
+    private async Task SaveAsync()
+    {
+        if (!IsPublic && !Students.Any())
+        {
+            messageClass = "form-error";
+            message = "Este professor ainda nÃ£o possui alunos vinculados para receber aula privada.";
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(draft.Title) || string.IsNullOrWhiteSpace(draft.Description))
+        {
+            messageClass = "form-error";
+            message = "Preencha título e descrição antes de salvar.";
+            return;
+        }
+
+        var lesson = await ContentStore.SaveLessonAsync(draft);
+        messageClass = "form-success";
+        message = $"Aula \"{lesson.Title}\" salva com sucesso.";
+    }
+}

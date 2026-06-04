@@ -1,0 +1,70 @@
+@page "/professor/aulas/editar/form"
+@page "/professor/aulas/editar/{Slug}"
+@attribute [Authorize]
+@rendermode InteractiveServer
+@inject LearningContentStore ContentStore
+
+<PageTitle>Editar aula</PageTitle>
+
+<section class="screen-panel professor-panel">
+    <AppHeader Mode="professor" ShowBack="true" HomeHref="professor/inicio" />
+    @if (lesson is null)
+    {
+        <p class="form-error">Aula não encontrada.</p>
+    }
+    else
+    {
+        <div class="lesson-form-wrap">
+            <h1>Editar aula @(lesson.IsPublic ? "geral" : "personalizada")</h1>
+            <form class="lesson-form">
+                @if (!lesson.IsPublic)
+                {
+                    <label>Aluno<input value="@lesson.StudentName" disabled /></label>
+                }
+                <label>Título<input @bind="lesson.Title" /></label>
+                <label>Descrição<input @bind="lesson.Description" /></label>
+                <label>
+                    Nível
+                    <select @bind="lesson.Level">
+                        <option>Iniciante</option>
+                        <option>Básico</option>
+                        <option>Intermediário</option>
+                        <option>Avançado</option>
+                    </select>
+                </label>
+                <div class="form-actions">
+                    <a href="professor/aulas/editar">Cancelar</a>
+                    <button class="outline" type="button">Excluir aula</button>
+                    <button class="primary" type="button" @onclick="Save">Salvar</button>
+                </div>
+                @if (!string.IsNullOrWhiteSpace(message))
+                {
+                    <p class="form-success">@message</p>
+                }
+            </form>
+        </div>
+    }
+</section>
+
+@code {
+    [Parameter] public string? Slug { get; set; }
+
+    private LessonContent? lesson;
+    private string? message;
+
+    protected override void OnParametersSet()
+    {
+        lesson = ContentStore.GetLesson(Slug ?? "fundamentos");
+    }
+
+    private void Save()
+    {
+        if (lesson is null)
+        {
+            return;
+        }
+
+        ContentStore.UpdateLesson(lesson);
+        message = "Aula salva com sucesso.";
+    }
+}

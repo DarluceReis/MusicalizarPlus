@@ -1,0 +1,31 @@
+<a class="practice-tile" href="aluno/pratica/@Practice.Slug">
+    @if (Practice.HasNewFeedbackForStudent)
+    {
+        <span class="alert-dot">1</span>
+    }
+    <div class="photo @Practice.PhotoClass">
+        @if (Practice.VideoResponse is not null)
+        {
+            <video class="tile-video-preview" preload="metadata" muted playsinline src="@($"/videos/praticas/{Practice.Slug}")"></video>
+        }
+        <span class="play-button"></span>
+    </div>
+    <strong>@Practice.Title</strong>
+    <p>Data de envio: @Practice.Date</p>
+    <p>Status: <b>@Status</b></p>
+    @if (HasFeedback)
+    {
+        <p>Feedback: <u>Visualizar e responder</u></p>
+    }
+    else
+    {
+        <p>Feedback: aguardando professor</p>
+    }
+</a>
+
+@code {
+    [Parameter, EditorRequired] public PracticeSubmission Practice { get; set; } = default!;
+
+    private bool HasFeedback => !string.IsNullOrWhiteSpace(Practice.FeedbackText);
+    private string Status => HasFeedback ? "Prática avaliada" : "Aguardando avaliação do professor";
+}

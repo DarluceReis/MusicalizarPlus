@@ -1,0 +1,52 @@
+@page "/aluno/aulas"
+@attribute [Authorize]
+@rendermode InteractiveServer
+@inject LearningContentStore ContentStore
+
+<PageTitle>Lista de Aulas</PageTitle>
+
+<section class="screen-panel student-panel">
+    <AppHeader Mode="student" />
+    <div class="student-toolbar">
+        <h1>Lista de Aulas</h1>
+        <label>Buscar<input @bind="searchTerm" @bind:event="oninput" /></label>
+        <button class="filter-button" type="button" title="Filtrar"></button>
+    </div>
+
+    <h2>Aulas personalizadas disponíveis</h2>
+    <p class="lead">Selecione uma aula preparada especialmente para o seu nível e instrumento.</p>
+    <div class="lesson-grid">
+        @foreach (var lesson in Filter(ContentStore.PrivateLessonsFor(StudentName)))
+        {
+            <LessonTile Content="lesson" />
+        }
+    </div>
+
+    <h2>Aulas gerais disponíveis</h2>
+    <p class="lead">Selecione uma aula aberta a todos os alunos, com dicas e conteúdos essenciais de estudo.</p>
+    <div class="lesson-grid compact-lessons">
+        @foreach (var lesson in Filter(ContentStore.PublicLessons))
+        {
+            <LessonTile Content="lesson" />
+        }
+    </div>
+</section>
+
+@code {
+    private const string StudentName = "João Alves";
+    private string searchTerm = "";
+
+    private IEnumerable<LessonContent> Filter(IEnumerable<LessonContent> lessons)
+    {
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            return lessons;
+        }
+
+        var term = searchTerm.Trim();
+        return lessons.Where(lesson =>
+            lesson.Title.Contains(term, StringComparison.OrdinalIgnoreCase) ||
+            lesson.Description.Contains(term, StringComparison.OrdinalIgnoreCase) ||
+            lesson.Level.Contains(term, StringComparison.OrdinalIgnoreCase));
+    }
+}

@@ -1,0 +1,94 @@
+@inject NavigationManager Navigation
+@inject LearningContentStore ContentStore
+@rendermode InteractiveServer
+
+<header class="app-header">
+    <div class="music-ambience" aria-hidden="true">
+        <span>♪</span>
+        <span>♩</span>
+        <span>♫</span>
+    </div>
+    @if (ShowBack)
+    {
+        <a class="icon-button back-button" href="@BackHref" title="Voltar"></a>
+    }
+    <a class="brand" href="@HomeHref">
+        <Logo />
+    </a>
+    <div class="header-actions">
+        @if (Mode == "student")
+        {
+            <button class="hamburger" type="button" title="Menu" @onclick="ToggleMenu">
+                <span></span><span></span><span></span>
+            </button>
+            <a class="user-icon" title="Meus dados" href="aluno/dados"></a>
+        }
+        else
+        {
+            <button class="bell" type="button" title="Notificações" @onclick="ToggleNotifications">
+                @if (NotificationCount > 0)
+                {
+                    <span>@NotificationCount</span>
+                }
+            </button>
+        }
+    </div>
+</header>
+
+@if (menuOpen)
+{
+    <div class="student-menu">
+        <a href="aluno/aulas">Lista de Aulas</a>
+        <a href="aluno/historico">Histórico de Práticas</a>
+        <a href="auth/logout">Sair</a>
+    </div>
+}
+
+@if (notificationOpen)
+{
+    <div class="notification-popover">
+        <strong>Notificações</strong>
+        @if (Notifications.Any())
+        {
+            @foreach (var practice in Notifications)
+            {
+                <a href="@($"professor/praticas/{practice.Slug}")">@practice.Student enviou uma prática para avaliação.</a>
+            }
+        }
+        else
+        {
+            <p>Nenhuma notificação nova.</p>
+        }
+    </div>
+}
+
+@code {
+    [Parameter] public string Mode { get; set; } = "student";
+    [Parameter] public bool ShowBack { get; set; }
+    [Parameter] public string HomeHref { get; set; } = "aluno/aulas";
+    [Parameter] public string? BackHref { get; set; }
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
+
+    private bool menuOpen;
+    private bool notificationOpen;
+    private string professorName = "";
+    private int NotificationCount => IsPracticeArea ? 0 : Notifications.Count;
+    private IReadOnlyList<PracticeSubmission> Notifications =>
+        string.IsNullOrWhiteSpace(professorName) ? [] : ContentStore.NewPracticesForProfessor(professorName);
+    private bool IsPracticeArea => new Uri(Navigation.Uri).AbsolutePath.StartsWith("/professor/praticas", StringComparison.OrdinalIgnoreCase);
+
+    private void ToggleMenu() => menuOpen = !menuOpen;
+
+    private void ToggleNotifications() => notificationOpen = !notificationOpen;
+
+    protected override void OnParametersSet()
+    {
+        BackHref ??= Mode == "professor" ? "professor/inicio" : "aluno/aulas";
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await AuthenticationStateTask;
+        professorName = state.User.Identity?.Name ?? "";
+    }
+}

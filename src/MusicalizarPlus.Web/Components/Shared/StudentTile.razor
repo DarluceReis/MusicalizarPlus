@@ -1,0 +1,13 @@
+﻿<article class="student-tile">
+    <div class="avatar @Student.AvatarClass"></div>
+    <div>
+        <h3>@Student.Name</h3>
+        <p>Nível: @Student.Level</p>
+        <p>Instrumento: @Student.Instrument</p>
+        <p>@Student.Time</p>
+    </div>
+</article>
+
+@code {
+    [Parameter, EditorRequired] public StudentCard Student { get; set; } = default!;
+}

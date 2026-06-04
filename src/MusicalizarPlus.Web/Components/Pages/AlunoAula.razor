@@ -1,0 +1,59 @@
+@page "/aluno/aula/fundamentos"
+@page "/aluno/aula/{Slug}"
+@page "/professor/aula/{Slug}"
+@attribute [Authorize]
+@inject LearningContentStore ContentStore
+@inject NavigationManager Navigation
+
+<PageTitle>@Lesson.Title</PageTitle>
+
+<section class="screen-panel student-panel">
+    <AppHeader Mode="@HeaderMode" ShowBack="@IsProfessorView" HomeHref="@HomeHref" BackHref="@BackHref" />
+    <h1>@Lesson.Title</h1>
+    <p><b>Descrição:</b> @Lesson.Description <b>Nível:</b> @Lesson.Level</p>
+    <div class="lesson-detail-grid">
+        @if (Lesson.Video is not null)
+        {
+            <video class="video-player" controls preload="metadata" src="@($"/videos/aulas/{Lesson.Slug}")"></video>
+        }
+        else
+        {
+            <div class="video-hero @Lesson.PhotoClass">
+                <span class="play-button large" title="Play/Pause"></span>
+            </div>
+        }
+        <aside class="lesson-actions">
+            <p>Baixe aqui o material auxiliar da aula</p>
+            @if (Lesson.Material is not null)
+            {
+                <a class="outline upload-style" href="materiais/aulas/@Lesson.Slug">Baixar material</a>
+            }
+            else
+            {
+                <button class="outline upload-style" type="button" disabled>Material indisponível</button>
+            }
+            @if (!IsProfessorView)
+            {
+                <div class="finish-box">
+                    <strong>Já finalizou a prática da aula?</strong>
+                    <p>Envie seu vídeo com a sua prática da aula ao lado.</p>
+                    <a class="primary" href="aluno/aula/@Lesson.Slug/enviar">Enviar gravação</a>
+                </div>
+            }
+        </aside>
+    </div>
+    <footer>Suporte - Termos de Uso</footer>
+</section>
+
+@code {
+    [Parameter] public string? Slug { get; set; }
+
+    private bool IsProfessorView => new Uri(Navigation.Uri).AbsolutePath.StartsWith("/professor/", StringComparison.OrdinalIgnoreCase);
+    private string HeaderMode => IsProfessorView ? "professor" : "student";
+    private string HomeHref => IsProfessorView ? "professor/inicio" : "aluno/aulas";
+    private string BackHref => IsProfessorView ? "professor/inicio" : "aluno/aulas";
+
+    private LessonContent Lesson =>
+        ContentStore.GetLesson(Slug ?? "fundamentos")
+        ?? LessonContent.FromCard(DemoCatalog.GetLesson(Slug ?? "fundamentos"), true, null, LearningContentStore.DemoProfessorName);
+}

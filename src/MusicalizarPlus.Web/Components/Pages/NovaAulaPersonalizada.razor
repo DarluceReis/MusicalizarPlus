@@ -1,0 +1,22 @@
+@page "/professor/aulas/nova/personalizada"
+@attribute [Authorize]
+@rendermode InteractiveServer
+
+<PageTitle>Nova aula privada</PageTitle>
+
+<section class="screen-panel professor-panel">
+    <AppHeader Mode="professor" ShowBack="true" HomeHref="professor/inicio" />
+    <LessonForm Title="Adicionar nova aula privada" SaveText="Salvar" ProfessorName="@professorName" />
+</section>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
+
+    private string professorName = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateTask;
+        professorName = authState.User.Identity?.Name ?? "";
+    }
+}

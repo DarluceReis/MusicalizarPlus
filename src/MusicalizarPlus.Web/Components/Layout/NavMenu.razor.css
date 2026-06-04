@@ -1,0 +1,74 @@
+.side-profile {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 42px 20px 36px;
+}
+
+.side-profile strong,
+.side-profile span {
+    display: block;
+    font-size: 20px;
+    line-height: 1.05;
+}
+
+.side-profile span {
+    font-weight: 500;
+}
+
+.side-nav {
+    display: flex;
+    flex-direction: column;
+}
+
+.side-link {
+    min-height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    border-top: 3px solid #188de2;
+    background: #60b3ee;
+    color: #061019;
+    font-size: 20px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.side-link.active {
+    background: #b9dcf6;
+}
+
+.side-link:hover {
+    color: #061019;
+    background: #cbe8fb;
+}
+
+.home-mark {
+    width: 34px;
+    height: 30px;
+    display: inline-block;
+    background: #2698ea;
+    clip-path: polygon(50% 0, 100% 42%, 84% 42%, 84% 100%, 58% 100%, 58% 65%, 42% 65%, 42% 100%, 16% 100%, 16% 42%, 0 42%);
+}
+
+.side-exit {
+    width: 132px;
+    height: 50px;
+    margin: 52px auto 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #f7fbff;
+    color: #061019;
+    font-size: 20px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.side-footer {
+    color: #d7efff;
+    text-align: center;
+    font-size: 13px;
+}

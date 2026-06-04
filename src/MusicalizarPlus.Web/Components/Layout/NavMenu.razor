@@ -1,0 +1,35 @@
+<AuthorizeView>
+    <Authorized Context="auth">
+        <a class="side-profile" href="professor/dados" title="Abrir perfil do professor">
+            <div class="avatar avatar-professor"></div>
+            <div>
+                <strong>@(auth.User.Identity?.Name ?? "Professor")</strong>
+                <span>Professor</span>
+            </div>
+        </a>
+    </Authorized>
+    <NotAuthorized>
+        <a class="side-profile" href="login" title="Entrar">
+            <div class="avatar avatar-professor"></div>
+            <div>
+                <strong>Professor</strong>
+                <span>Entrar</span>
+            </div>
+        </a>
+    </NotAuthorized>
+</AuthorizeView>
+
+<nav class="side-nav">
+    <NavLink class="side-link" href="professor/inicio">
+        <span class="home-mark"></span>
+        Início
+    </NavLink>
+    <NavLink class="side-link" href="professor/aulas/nova">Adicionar nova aula</NavLink>
+    <NavLink class="side-link" href="professor/aulas/editar">Editar aulas</NavLink>
+    <NavLink class="side-link" href="professor/alunos">Visualizar alunos</NavLink>
+    <NavLink class="side-link" href="professor/praticas">Ver práticas</NavLink>
+</nav>
+
+<a class="side-exit" href="auth/logout">Sair</a>
+
+<div class="side-footer">Suporte - Termos de Uso</div>

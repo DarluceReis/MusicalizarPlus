@@ -1,0 +1,457 @@
+{
+  "Lessons": [
+    {
+      "Slug": "teste",
+      "Title": "teste",
+      "Description": "teste",
+      "Level": "Iniciante",
+      "PhotoClass": "photo-fundamentos",
+      "ProfessorName": "Vinicius Alves",
+      "IsPublic": false,
+      "StudentName": "Jo\u00E3o Alves",
+      "Video": {
+        "Key": "aulas/videos/2d40f6c358244a7a847e24e11d51e67a-7083371-uhd_3840_2160_25fps.mp4",
+        "FileName": "7083371-uhd_3840_2160_25fps.mp4",
+        "ContentType": "video/mp4"
+      },
+      "Material": {
+        "Key": "aulas/materiais/19b41cbd3c3143be9d83183b4ef99d0d-123.1473_aula1_8277906 (1) (1).PDF",
+        "FileName": "123.1473_aula1_8277906 (1) (1).PDF",
+        "ContentType": "application/pdf"
+      }
+    },
+    {
+      "Slug": "partes-violao",
+      "Title": "Nome das partes do viol\u00E3o",
+      "Description": "Conhe\u00E7a as partes do viol\u00E3o e suas fun\u00E7\u00F5es principais.",
+      "Level": "Iniciante",
+      "PhotoClass": "photo-violao",
+      "ProfessorName": "Vinicius Alves",
+      "IsPublic": true,
+      "StudentName": null,
+      "Video": {
+        "Key": "aulas/videos/partes-violao.mp4",
+        "FileName": "partes-violao.mp4",
+        "ContentType": "video/mp4"
+      },
+      "Material": null
+    },
+    {
+      "Slug": "partes-viola",
+      "Title": "Nome das partes da viola",
+      "Description": "Identifique corpo, bra\u00E7o, tarraxas e cordas da viola.",
+      "Level": "Iniciante",
+      "PhotoClass": "photo-viola",
+      "ProfessorName": "Vinicius Alves",
+      "IsPublic": true,
+      "StudentName": null,
+      "Video": {
+        "Key": "aulas/videos/partes-viola.mp4",
+        "FileName": "partes-viola.mp4",
+        "ContentType": "video/mp4"
+      },
+      "Material": null
+    },
+    {
+      "Slug": "trocar-cordas",
+      "Title": "Como trocar as cordas dos instrumentos",
+      "Description": "Passo a passo para trocar cordas com seguran\u00E7a.",
+      "Level": "B\u00E1sico",
+      "PhotoClass": "photo-cordas",
+      "ProfessorName": "Vinicius Alves",
+      "IsPublic": true,
+      "StudentName": null,
+      "Video": {
+        "Key": "aulas/videos/trocar-cordas.mp4",
+        "FileName": "trocar-cordas.mp4",
+        "ContentType": "video/mp4"
+      },
+      "Material": null
+    },
+    {
+      "Slug": "manutencao-instrumentos",
+      "Title": "Como fazer a manuten\u00E7\u00E3o dos instrumentos",
+      "Description": "Cuidados essenciais antes e depois do estudo.",
+      "Level": "B\u00E1sico",
+      "PhotoClass": "photo-manutencao",
+      "ProfessorName": "Vinicius Alves",
+      "IsPublic": true,
+      "StudentName": null,
+      "Video": {
+        "Key": "aulas/videos/manutencao-instrumentos.mp4",
+        "FileName": "manutencao-instrumentos.mp4",
+        "ContentType": "video/mp4"
+      },
+      "Material": null
+    },
+    {
+      "Slug": "afinacao-ouvido",
+      "Title": "Afina\u00E7\u00E3o pelo ouvido",
+      "Description": "Exerc\u00EDcios simples para perceber cordas desafinadas e ajustar com calma.",
+      "Level": "B\u00E1sico",
+      "PhotoClass": "photo-viola",
+      "ProfessorName": "Vinicius Alves",
+      "IsPublic": true,
+      "StudentName": null,
+      "Video": {
+        "Key": "aulas/videos/afinacao-ouvido.mp4",
+        "FileName": "afinacao-ouvido.mp4",
+        "ContentType": "video/mp4"
+      },
+      "Material": null
+    },
+    {
+      "Slug": "postura-estudo",
+      "Title": "Postura para estudar melhor",
+      "Description": "Organize corpo, instrumento e rotina para evoluir sem tens\u00E3o.",
+      "Level": "Iniciante",
+      "PhotoClass": "photo-fundamentos",
+      "ProfessorName": "Vinicius Alves",
+      "IsPublic": true,
+      "StudentName": null,
+      "Video": {
+        "Key": "aulas/videos/postura-estudo.mp4",
+        "FileName": "postura-estudo.mp4",
+        "ContentType": "video/mp4"
+      },
+      "Material": null
+    },
+    {
+      "Slug": "leitura-cifras",
+      "Title": "Leitura de cifras",
+      "Description": "Entenda s\u00EDmbolos comuns e como transformar cifras em pr\u00E1tica musical.",
+      "Level": "Intermedi\u00E1rio",
+      "PhotoClass": "photo-acordes",
+      "ProfessorName": "Vinicius Alves",
+      "IsPublic": true,
+      "StudentName": null,
+      "Video": {
+        "Key": "aulas/videos/leitura-cifras.mp4",
+        "FileName": "leitura-cifras.mp4",
+        "ContentType": "video/mp4"
+      },
+      "Material": null
+    },
+    {
+      "Slug": "aquecimento-dedos",
+      "Title": "Aquecimento dos dedos",
+      "Description": "Prepare as m\u00E3os antes de tocar com movimentos curtos e progressivos.",
+      "Level": "B\u00E1sico",
+      "PhotoClass": "photo-dedilhado",
+      "ProfessorName": "Vinicius Alves",
+      "IsPublic": true,
+      "StudentName": null,
+      "Video": {
+        "Key": "aulas/videos/aquecimento-dedos.mp4",
+        "FileName": "aquecimento-dedos.mp4",
+        "ContentType": "video/mp4"
+      },
+      "Material": null
+    },
+    {
+      "Slug": "fundamentos",
+      "Title": "Fundamentos",
+      "Description": "Aprenda os fundamentos do instrumento, postura correta e primeiros acordes.",
+      "Level": "Iniciante",
+      "PhotoClass": "photo-fundamentos",
+      "ProfessorName": "Vinicius Alves",
+      "IsPublic": false,
+      "StudentName": "Jo\u00E3o Alves",
+      "Video": {
+        "Key": "aulas/videos/fundamentos.mp4",
+        "FileName": "fundamentos.mp4",
+        "ContentType": "video/mp4"
+      },
+      "Material": null
+    },
+    {
+      "Slug": "ritmos-essenciais",
+      "Title": "Ritmos Essenciais",
+      "Description": "Pratique padr\u00F5es r\u00EDtmicos b\u00E1sicos usados em m\u00FAsicas populares.",
+      "Level": "Iniciante / Intermedi\u00E1rio",
+      "PhotoClass": "photo-ritmos",
+      "ProfessorName": "Vinicius Alves",
+      "IsPublic": false,
+      "StudentName": "Jo\u00E3o Alves",
+      "Video": {
+        "Key": "aulas/videos/ritmos-essenciais.mp4",
+        "FileName": "ritmos-essenciais.mp4",
+        "ContentType": "video/mp4"
+      },
+      "Material": null
+    },
+    {
+      "Slug": "acordes-maiores-menores",
+      "Title": "Acordes Maiores e Menores",
+      "Description": "Explore novos acordes e aprenda como aplic\u00E1-los em m\u00FAsicas reais.",
+      "Level": "Intermedi\u00E1rio",
+      "PhotoClass": "photo-acordes",
+      "ProfessorName": "Vinicius Alves",
+      "IsPublic": false,
+      "StudentName": "Jo\u00E3o Alves",
+      "Video": {
+        "Key": "aulas/videos/acordes-maiores-menores.mp4",
+        "FileName": "acordes-maiores-menores.mp4",
+        "ContentType": "video/mp4"
+      },
+      "Material": null
+    },
+    {
+      "Slug": "tecnicas-dedilhado",
+      "Title": "T\u00E9cnicas de Dedilhado",
+      "Description": "Exerc\u00EDcios para desenvolver coordena\u00E7\u00E3o e fluidez no dedilhado.",
+      "Level": "Intermedi\u00E1rio / Avan\u00E7ado",
+      "PhotoClass": "photo-dedilhado",
+      "ProfessorName": "Vinicius Alves",
+      "IsPublic": false,
+      "StudentName": "Jo\u00E3o Alves",
+      "Video": {
+        "Key": "aulas/videos/tecnicas-dedilhado.mp4",
+        "FileName": "tecnicas-dedilhado.mp4",
+        "ContentType": "video/mp4"
+      },
+      "Material": null
+    },
+    {
+      "Slug": "primeiras-batidas",
+      "Title": "Primeiras Batidas",
+      "Description": "Treine batidas simples com troca de acordes em andamento lento.",
+      "Level": "Iniciante",
+      "PhotoClass": "photo-ritmos",
+      "ProfessorName": "Vinicius Alves",
+      "IsPublic": false,
+      "StudentName": "Jo\u00E3o Alves",
+      "Video": {
+        "Key": "aulas/videos/primeiras-batidas.mp4",
+        "FileName": "primeiras-batidas.mp4",
+        "ContentType": "video/mp4"
+      },
+      "Material": null
+    },
+    {
+      "Slug": "repertorio-inicial",
+      "Title": "Repert\u00F3rio Inicial",
+      "Description": "Aplique acordes b\u00E1sicos em m\u00FAsicas curtas para ganhar confian\u00E7a.",
+      "Level": "B\u00E1sico",
+      "PhotoClass": "photo-fundamentos",
+      "ProfessorName": "Vinicius Alves",
+      "IsPublic": false,
+      "StudentName": "Jo\u00E3o Alves",
+      "Video": {
+        "Key": "aulas/videos/repertorio-inicial.mp4",
+        "FileName": "repertorio-inicial.mp4",
+        "ContentType": "video/mp4"
+      },
+      "Material": null
+    }
+  ],
+  "Practices": [
+    {
+      "Slug": "fundamentos",
+      "Title": "Fundamentos",
+      "Student": "Jo\u00E3o Alves",
+      "Level": "Iniciante",
+      "Instrument": "Viol\u00E3o",
+      "Date": "12/11/2025",
+      "PhotoClass": "photo-pratica-1",
+      "ProfessorName": "Vinicius Alves",
+      "HasNewActivity": false,
+      "FeedbackText": "Adorei a evolu\u00E7\u00E3o. Est\u00E1 perfeito!",
+      "FeedbackProfessor": "Vinicius Alves",
+      "FeedbackAt": "2026-06-02T23:51:32.1149666+01:00",
+      "HasNewFeedbackForStudent": false,
+      "StudentReply": null,
+      "StudentReplyAt": null,
+      "HasNewReplyForProfessor": false,
+      "VideoResponse": {
+        "Key": "praticas/videos/b48adc2219ad47b3b103e635ff211251-7424218-uhd_3840_2160_30fps.mp4",
+        "FileName": "7424218-uhd_3840_2160_30fps.mp4",
+        "ContentType": "video/mp4"
+      }
+    },
+    {
+      "Slug": "ritmos-essenciais",
+      "Title": "Ritmos Essenciais",
+      "Student": "Jo\u00E3o Alves",
+      "Level": "Iniciante / Intermedi\u00E1rio",
+      "Instrument": "Viol\u00E3o",
+      "Date": "13/11/2025",
+      "PhotoClass": "photo-pratica-2",
+      "ProfessorName": "Vinicius Alves",
+      "HasNewActivity": true,
+      "FeedbackText": "Seu ritmo est\u00E1 mais firme. Continue praticando a troca entre os acordes com metr\u00F4nomo lento.",
+      "FeedbackProfessor": "Vinicius Alves",
+      "FeedbackAt": "2026-06-02T20:15:00",
+      "HasNewFeedbackForStudent": false,
+      "StudentReply": null,
+      "StudentReplyAt": null,
+      "HasNewReplyForProfessor": false,
+      "VideoResponse": {
+        "Key": "praticas/videos/joao-ritmos.mp4",
+        "FileName": "joao-ritmos.mp4",
+        "ContentType": "video/mp4"
+      }
+    },
+    {
+      "Slug": "acordes-maiores-menores",
+      "Title": "Acordes Maiores e Menores",
+      "Student": "Jo\u00E3o Alves",
+      "Level": "Intermedi\u00E1rio",
+      "Instrument": "Viol\u00E3o",
+      "Date": "14/11/2025",
+      "PhotoClass": "photo-pratica-3",
+      "ProfessorName": "Vinicius Alves",
+      "HasNewActivity": false,
+      "FeedbackText": null,
+      "FeedbackProfessor": null,
+      "FeedbackAt": null,
+      "HasNewFeedbackForStudent": false,
+      "StudentReply": null,
+      "StudentReplyAt": null,
+      "HasNewReplyForProfessor": false,
+      "VideoResponse": {
+        "Key": "praticas/videos/joao-acordes.mp4",
+        "FileName": "joao-acordes.mp4",
+        "ContentType": "video/mp4"
+      }
+    },
+    {
+      "Slug": "ana-ritmos",
+      "Title": "Ritmos Essenciais",
+      "Student": "Ana Maria",
+      "Level": "Intermedi\u00E1rio",
+      "Instrument": "Viola",
+      "Date": "13/11/2025",
+      "PhotoClass": "photo-pratica-2",
+      "ProfessorName": "Vinicius Alves",
+      "HasNewActivity": false,
+      "FeedbackText": null,
+      "FeedbackProfessor": null,
+      "FeedbackAt": null,
+      "HasNewFeedbackForStudent": false,
+      "StudentReply": null,
+      "StudentReplyAt": null,
+      "HasNewReplyForProfessor": false,
+      "VideoResponse": {
+        "Key": "praticas/videos/ana-ritmos.mp4",
+        "FileName": "ana-ritmos.mp4",
+        "ContentType": "video/mp4"
+      }
+    },
+    {
+      "Slug": "ana-postura",
+      "Title": "Postura para estudar melhor",
+      "Student": "Ana Maria",
+      "Level": "Intermedi\u00E1rio",
+      "Instrument": "Viola",
+      "Date": "15/11/2025",
+      "PhotoClass": "photo-pratica-1",
+      "ProfessorName": "Vinicius Alves",
+      "HasNewActivity": false,
+      "FeedbackText": "Boa postura geral. Ajuste apenas a altura do bra\u00E7o direito para relaxar mais o ombro.",
+      "FeedbackProfessor": "Vinicius Alves",
+      "FeedbackAt": "2026-06-02T20:30:00",
+      "HasNewFeedbackForStudent": true,
+      "StudentReply": "Obrigada, professor. Vou gravar novamente com esse ajuste.",
+      "StudentReplyAt": "2026-06-02T20:50:00",
+      "HasNewReplyForProfessor": true,
+      "VideoResponse": {
+        "Key": "praticas/videos/ana-postura.mp4",
+        "FileName": "ana-postura.mp4",
+        "ContentType": "video/mp4"
+      }
+    },
+    {
+      "Slug": "daniela-dedilhado",
+      "Title": "T\u00E9cnicas de Dedilhado",
+      "Student": "Daniela Roc.",
+      "Level": "Avan\u00E7ado",
+      "Instrument": "Viol\u00E3o",
+      "Date": "16/11/2025",
+      "PhotoClass": "photo-pratica-3",
+      "ProfessorName": "Vinicius Alves",
+      "HasNewActivity": true,
+      "FeedbackText": null,
+      "FeedbackProfessor": null,
+      "FeedbackAt": null,
+      "HasNewFeedbackForStudent": false,
+      "StudentReply": null,
+      "StudentReplyAt": null,
+      "HasNewReplyForProfessor": false,
+      "VideoResponse": {
+        "Key": "praticas/videos/daniela-dedilhado.mp4",
+        "FileName": "daniela-dedilhado.mp4",
+        "ContentType": "video/mp4"
+      }
+    },
+    {
+      "Slug": "daniela-leitura",
+      "Title": "Leitura de cifras",
+      "Student": "Daniela Roc.",
+      "Level": "Avan\u00E7ado",
+      "Instrument": "Viol\u00E3o",
+      "Date": "17/11/2025",
+      "PhotoClass": "photo-pratica-4",
+      "ProfessorName": "Vinicius Alves",
+      "HasNewActivity": false,
+      "FeedbackText": null,
+      "FeedbackProfessor": null,
+      "FeedbackAt": null,
+      "HasNewFeedbackForStudent": false,
+      "StudentReply": null,
+      "StudentReplyAt": null,
+      "HasNewReplyForProfessor": false,
+      "VideoResponse": {
+        "Key": "praticas/videos/daniela-leitura.mp4",
+        "FileName": "daniela-leitura.mp4",
+        "ContentType": "video/mp4"
+      }
+    },
+    {
+      "Slug": "rui-acordes",
+      "Title": "Acordes Maiores",
+      "Student": "Rui Barbosa",
+      "Level": "Iniciante",
+      "Instrument": "Viola",
+      "Date": "14/11/2025",
+      "PhotoClass": "photo-pratica-4",
+      "ProfessorName": "Vinicius Alves",
+      "HasNewActivity": true,
+      "FeedbackText": null,
+      "FeedbackProfessor": null,
+      "FeedbackAt": null,
+      "HasNewFeedbackForStudent": false,
+      "StudentReply": null,
+      "StudentReplyAt": null,
+      "HasNewReplyForProfessor": false,
+      "VideoResponse": {
+        "Key": "praticas/videos/rui-acordes.mp4",
+        "FileName": "rui-acordes.mp4",
+        "ContentType": "video/mp4"
+      }
+    },
+    {
+      "Slug": "rui-cordas",
+      "Title": "Troca de cordas",
+      "Student": "Rui Barbosa",
+      "Level": "B\u00E1sico",
+      "Instrument": "Viola",
+      "Date": "18/11/2025",
+      "PhotoClass": "photo-pratica-2",
+      "ProfessorName": "Vinicius Alves",
+      "HasNewActivity": false,
+      "FeedbackText": "A sequ\u00EAncia est\u00E1 correta. Na pr\u00F3xima grava\u00E7\u00E3o, aproxime mais a c\u00E2mera da m\u00E3o esquerda.",
+      "FeedbackProfessor": "Vinicius Alves",
+      "FeedbackAt": "2026-06-02T21:00:00",
+      "HasNewFeedbackForStudent": true,
+      "StudentReply": null,
+      "StudentReplyAt": null,
+      "HasNewReplyForProfessor": false,
+      "VideoResponse": {
+        "Key": "praticas/videos/rui-cordas.mp4",
+        "FileName": "rui-cordas.mp4",
+        "ContentType": "video/mp4"
+      }
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+.app-shell {
+    min-height: 100vh;
+    background: #d9d9d9;
+}
+
+.professor-shell {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+}
+
+.student-shell,
+.auth-shell {
+    display: block;
+}
+
+.app-main {
+    min-width: 0;
+}
+
+.professor-sidebar {
+    min-height: 100vh;
+    background: #2698ea;
+    color: #071521;
+    position: sticky;
+    top: 0;
+}
+
+#blazor-error-ui {
+    display: none;
+}
+
+@media (max-width: 800px) {
+    .professor-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .professor-sidebar {
+        min-height: auto;
+    }
+}
