@@ -887,6 +887,7 @@ p {
 .password-wrap {
     position: relative;
     display: block;
+    min-width: 0;
 }
 
 .password-wrap input {
@@ -1287,13 +1288,15 @@ p {
 }
 
 .profile-action-panel {
-    width: min(100%, 820px);
+    width: 100%;
+    max-width: 820px;
+    box-sizing: border-box;
     margin-top: 20px;
     padding: 20px;
     border: 2px solid var(--blue);
     border-radius: 8px;
     display: grid;
-    grid-template-columns: repeat(3, minmax(170px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
     gap: 14px;
     align-items: end;
     background: #fff;
@@ -1302,15 +1305,18 @@ p {
 .profile-action-panel label {
     display: grid;
     gap: 6px;
+    min-width: 0;
 }
 
 .profile-action-panel input {
     width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 .profile-action-panel .primary {
-    width: 190px;
-    grid-column: 1;
+    width: 100%;
+    max-width: 220px;
 }
 
 .avatar-empty {
