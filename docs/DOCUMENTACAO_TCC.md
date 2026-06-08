@@ -1,229 +1,336 @@
 # Musicalizar+
 
-## Documentação técnica e funcional
+## Documentação final do Trabalho de Conclusão de Curso
 
-### Identificação do projeto
-
-**Nome do sistema:** Musicalizar+  
-**Tipo de aplicação:** Plataforma web educacional para ensino musical  
-**Tecnologias principais:** .NET 10, Blazor Server, Minimal API, PostgreSQL 18 e SQL manual com Npgsql  
-**Público-alvo:** professores de música, alunos iniciantes/intermediários e avaliadores acadêmicos  
-**Objetivo acadêmico:** demonstrar uma solução funcional para organização de aulas, envio de práticas em vídeo e acompanhamento pedagógico entre professor e aluno.
+**Projeto:** Musicalizar+  
+**Tipo de sistema:** Plataforma web educacional para apoio ao ensino musical  
+**Tecnologias:** .NET 10, Blazor Server, ASP.NET Core Minimal API, PostgreSQL 18, Npgsql, SQL manual, Git LFS  
+**Repositório:** https://github.com/DarluceReis/MusicalizarPlus  
 
 ---
 
-## 1. Visão geral
+## Resumo
 
-O Musicalizar+ é uma plataforma web criada para apoiar o processo de aprendizagem musical. O sistema permite que professores publiquem aulas gerais para todos os alunos, criem aulas personalizadas para alunos específicos, anexem materiais de apoio, acompanhem práticas enviadas em vídeo e registrem feedbacks. Na visão do aluno, a plataforma permite visualizar aulas disponíveis, acessar conteúdos personalizados, enviar gravações práticas, acompanhar o histórico de práticas e responder aos feedbacks recebidos.
+O Musicalizar+ é uma plataforma web desenvolvida para apoiar o processo de ensino e aprendizagem musical, centralizando aulas, materiais de apoio, vídeos de prática, feedbacks e respostas entre professores e alunos. O sistema foi construído com .NET 10, utilizando Blazor Server para a interface, uma API separada com ASP.NET Core Minimal API, PostgreSQL 18 como banco de dados relacional e acesso a dados por SQL manual com Npgsql, sem Entity Framework.
 
-A proposta central é aproximar professor e aluno dentro de um ambiente único, reduzindo a dispersão de materiais em mensagens, pastas soltas ou links externos. A aplicação foi construída com foco em usabilidade, separação de responsabilidades e possibilidade de evolução futura para armazenamento em nuvem.
-
----
-
-## 2. Problema abordado
-
-Em aulas de música, principalmente em modelos híbridos ou remotos, é comum que:
-
-- professores enviem vídeos, PDFs e orientações por canais diferentes;
-- alunos tenham dificuldade para localizar materiais e feedbacks anteriores;
-- práticas enviadas pelos alunos se percam em conversas;
-- o professor não tenha uma visão organizada das práticas pendentes;
-- conteúdos gerais e personalizados fiquem misturados.
-
-O Musicalizar+ resolve esse problema centralizando aulas, materiais, vídeos, práticas, feedbacks e respostas em uma única plataforma.
+O projeto contempla autenticação de usuários, visão específica para alunos e professores, cadastro de aulas públicas e personalizadas, envio de vídeos, anexação de materiais em PDF, histórico de práticas, notificações e fluxo de feedback. A entrega também inclui scripts SQL, documentação técnica, arquivos de demonstração e versionamento no GitHub com Git LFS para arquivos maiores.
 
 ---
 
-## 3. Objetivos
+## Sumário
 
-### 3.1 Objetivo geral
+1. Introdução  
+2. Problema  
+3. Justificativa  
+4. Objetivos  
+5. Escopo do projeto  
+6. Público-alvo e atores  
+7. Requisitos funcionais  
+8. Requisitos não funcionais  
+9. Ferramentas e tecnologias utilizadas  
+10. Arquitetura da solução  
+11. Modelagem do banco de dados  
+12. Diagramas do sistema  
+13. Casos de uso  
+14. Funcionalidades implementadas  
+15. Segurança  
+16. Armazenamento de arquivos  
+17. Execução local  
+18. Contas de demonstração  
+19. Testes e validação  
+20. Limitações e melhorias futuras  
+21. Conclusão  
+22. Link da defesa em vídeo  
 
-Desenvolver uma plataforma web para gestão de aulas musicais, envio de práticas por alunos e acompanhamento pedagógico por professores, utilizando .NET, Blazor e PostgreSQL.
+---
 
-### 3.2 Objetivos específicos
+## 1. Introdução
+
+O ensino musical exige acompanhamento constante, prática frequente e retorno pedagógico individualizado. Em aulas presenciais, remotas ou híbridas, é comum que professores enviem conteúdos, vídeos, exercícios e feedbacks por canais diferentes, como aplicativos de mensagem, e-mail, links externos ou pastas compartilhadas. Essa dispersão dificulta o acompanhamento do estudo e a organização do processo de aprendizagem.
+
+O Musicalizar+ foi desenvolvido como uma solução web para centralizar esse fluxo. A plataforma permite que professores publiquem aulas, anexem materiais, acompanhem práticas enviadas pelos alunos e registrem feedbacks. Os alunos, por sua vez, podem acessar aulas, consultar materiais, enviar vídeos de prática e acompanhar o histórico de avaliações.
+
+O sistema foi planejado como uma aplicação acadêmica funcional, com foco em demonstrar os principais fluxos de uma plataforma de ensino musical e uma arquitetura organizada em camadas.
+
+---
+
+## 2. Problema
+
+O problema identificado está relacionado à falta de centralização no acompanhamento de aulas musicais e práticas dos alunos.
+
+Em um cenário comum:
+
+- o professor envia vídeos por um canal;
+- o material de apoio fica em outro local;
+- o aluno envia práticas por mensagem;
+- o feedback retorna em formato textual ou áudio separado;
+- o histórico das avaliações se perde ao longo do tempo;
+- o professor não consegue visualizar facilmente quais alunos ainda precisam de retorno.
+
+Essa falta de organização prejudica tanto o aluno quanto o professor. O aluno perde referências de estudo e não acompanha claramente sua evolução. O professor, por sua vez, precisa controlar manualmente práticas, feedbacks e materiais.
+
+O Musicalizar+ resolve esse problema ao reunir em um único ambiente:
+
+- aulas públicas;
+- aulas personalizadas;
+- vídeos das aulas;
+- documentos de apoio;
+- práticas enviadas por alunos;
+- feedbacks do professor;
+- respostas do aluno;
+- notificações de novas atividades.
+
+---
+
+## 3. Justificativa
+
+A criação do Musicalizar+ se justifica pela necessidade de uma ferramenta simples, direcionada e organizada para apoiar o ensino musical.
+
+Embora existam plataformas gerais de ensino, muitas não contemplam de forma direta o fluxo de prática em vídeo, correção individual e resposta do aluno. No contexto musical, esse fluxo é essencial, pois o professor precisa ver ou ouvir a execução do aluno para orientar postura, ritmo, técnica e evolução.
+
+O projeto também se justifica academicamente por reunir diferentes competências do desenvolvimento web:
+
+- criação de interface com Blazor;
+- desenvolvimento de API;
+- modelagem de banco relacional;
+- uso de SQL manual;
+- autenticação;
+- upload de arquivos;
+- separação em camadas;
+- versionamento no GitHub;
+- documentação técnica.
+
+---
+
+## 4. Objetivos
+
+### 4.1 Objetivo geral
+
+Desenvolver uma plataforma web para apoio ao ensino musical, permitindo a gestão de aulas, envio de práticas em vídeo e acompanhamento por feedback entre professores e alunos.
+
+### 4.2 Objetivos específicos
 
 - Permitir cadastro e login de alunos e professores.
-- Restringir o acesso às áreas internas apenas a usuários autenticados.
-- Exibir uma área específica para alunos e outra para professores.
-- Permitir que professores criem aulas públicas e personalizadas.
-- Permitir upload de vídeos e documentos de apoio.
+- Restringir o acesso às funcionalidades internas a usuários autenticados.
+- Criar uma visão específica para alunos.
+- Criar uma visão específica para professores.
+- Permitir cadastro de aulas públicas.
+- Permitir cadastro de aulas personalizadas.
+- Permitir anexar vídeo e material complementar às aulas.
 - Permitir que alunos enviem vídeos de prática.
-- Permitir que professores visualizem práticas recebidas.
-- Permitir registro de feedback do professor.
-- Permitir resposta textual e envio de vídeo-resposta pelo aluno.
-- Exibir notificações quando houver novas práticas ou respostas.
-- Armazenar informações estruturadas em banco PostgreSQL.
-- Utilizar comandos SQL diretamente, sem Entity Framework.
-- Manter o código organizado em camadas.
+- Permitir que professores visualizem práticas enviadas.
+- Permitir que professores registrem feedback.
+- Permitir que alunos visualizem e respondam feedbacks.
+- Apresentar histórico de práticas do aluno.
+- Apresentar notificações de novas práticas ou respostas.
+- Utilizar PostgreSQL com SQL manual.
+- Organizar o código em camadas.
+- Versionar o projeto no GitHub.
 
 ---
 
-## 4. Escopo do sistema
+## 5. Escopo do projeto
 
-### 4.1 Funcionalidades incluídas
+### 5.1 Funcionalidades entregues
 
-- Autenticação de usuários.
-- Cadastro de alunos e professores.
-- Perfis com dados pessoais.
-- Listagem de aulas para alunos.
-- Busca de aulas.
-- Visualização de aula em formato de vídeo.
-- Download de material complementar.
-- Envio de prática pelo aluno.
-- Histórico de práticas.
-- Criação de aula pública pelo professor.
-- Criação de aula personalizada para aluno específico.
-- Edição de aulas públicas e personalizadas.
-- Visualização de alunos vinculados ao professor.
-- Busca de alunos pelo professor.
-- Visualização de práticas recebidas.
-- Feedback do professor.
-- Resposta do aluno ao feedback.
-- Notificações para novas atividades.
-- Armazenamento local de arquivos.
-- Estrutura preparada para armazenamento em AWS S3.
+O projeto entregue contempla:
 
-### 4.2 Funcionalidades futuras possíveis
+- tela de login;
+- tela de cadastro;
+- autenticação por cookie;
+- visão do aluno;
+- visão do professor;
+- proteção de páginas internas por autenticação;
+- listagem de aulas gerais;
+- listagem de aulas personalizadas;
+- busca de aulas;
+- player de vídeo para aulas;
+- envio de prática em vídeo;
+- histórico de práticas;
+- status de prática aguardando avaliação;
+- status de prática avaliada;
+- feedback do professor;
+- resposta do aluno ao feedback;
+- envio de vídeo-resposta;
+- painel inicial do professor;
+- criação de aula pública;
+- criação de aula privada/personalizada;
+- upload de vídeo da aula;
+- upload de material PDF;
+- edição de aulas;
+- visualização de alunos vinculados;
+- busca de alunos;
+- visualização de práticas enviadas;
+- notificações de novas práticas/respostas;
+- edição de perfil;
+- alteração de senha;
+- documentação técnica;
+- scripts SQL;
+- versionamento com Git e GitHub;
+- uso de Git LFS para vídeos e PDFs.
 
-- Publicação em ambiente de produção com domínio próprio.
-- Autenticação com JWT ou Identity.
-- Recuperação de senha por e-mail.
-- Painel administrativo.
-- Pagamentos ou assinaturas.
-- Transcodificação automática de vídeos.
-- Controle avançado de permissões por turma.
-- Integração com CloudFront para distribuição de vídeos.
-- Relatórios de evolução do aluno.
+### 5.2 Fora do escopo da versão entregue
 
----
+Alguns recursos foram planejados como evolução futura, mas não fazem parte da entrega principal:
 
-## 5. Perfis de usuário
-
-### 5.1 Aluno
-
-O aluno utiliza a plataforma para acessar aulas, assistir vídeos, baixar materiais, enviar práticas e acompanhar feedbacks.
-
-Funcionalidades principais:
-
-- Login e cadastro.
-- Visualização de aulas gerais.
-- Visualização de aulas personalizadas.
-- Busca de aulas.
-- Acesso à página “Meus dados”.
-- Edição de dados de perfil.
-- Envio de vídeo de prática.
-- Consulta do histórico de práticas.
-- Visualização de feedback.
-- Resposta ao feedback com texto ou vídeo.
-
-### 5.2 Professor
-
-O professor utiliza a plataforma para publicar conteúdos e acompanhar o desempenho dos alunos.
-
-Funcionalidades principais:
-
-- Login e cadastro.
-- Tela inicial com aulas publicadas.
-- Criação de aulas públicas.
-- Criação de aulas personalizadas.
-- Upload de vídeo da aula.
-- Upload de material complementar.
-- Edição de aulas.
-- Visualização de alunos.
-- Busca de alunos.
-- Visualização de práticas enviadas.
-- Envio de feedback.
-- Visualização de respostas do aluno.
-- Notificações de novas práticas/respostas.
-- Edição do perfil profissional.
+- pagamento de mensalidades;
+- chat em tempo real;
+- videochamada;
+- recuperação de senha por e-mail;
+- painel administrativo completo;
+- publicação definitiva em produção;
+- transcodificação automática de vídeos;
+- streaming otimizado com CDN;
+- relatórios estatísticos avançados.
 
 ---
 
-## 6. Regras de negócio
+## 6. Público-alvo e atores
 
-- Apenas usuários autenticados podem acessar aulas, dados de perfil, práticas e áreas internas.
-- Alunos visualizam aulas públicas e aulas personalizadas destinadas a eles.
-- Professores visualizam somente seus próprios alunos, aulas e práticas associadas.
-- Aula pública não exige vínculo com aluno específico.
-- Aula personalizada deve estar associada a um aluno.
-- Práticas enviadas por alunos devem aparecer no histórico do aluno e na área de práticas do professor responsável.
-- Feedbacks ficam associados à prática enviada.
-- O aluno só deve ver uma prática como avaliada quando houver feedback do professor.
-- Quando não houver feedback, o status deve indicar que a prática aguarda avaliação.
-- Notificações aparecem apenas quando existem atividades novas.
-- Após a visualização da notificação/prática, o indicador de novidade pode ser removido.
-- Arquivos enviados não são salvos no banco como binário; o sistema armazena metadados e caminhos/chaves dos arquivos.
+### 6.1 Aluno
+
+Usuário que acessa aulas, assiste vídeos, baixa materiais, envia práticas e responde feedbacks.
+
+### 6.2 Professor
+
+Usuário que cria aulas, acompanha alunos, visualiza práticas, envia feedbacks e gerencia conteúdos.
+
+### 6.3 Banca avaliadora
+
+Usuário indireto do projeto, responsável por avaliar a solução desenvolvida, a documentação, a demonstração e a adequação ao problema proposto.
 
 ---
 
-## 7. Arquitetura da solução
+## 7. Requisitos funcionais
 
-O projeto foi organizado em camadas para separar responsabilidades e facilitar manutenção.
+| Código | Requisito | Situação |
+|---|---|---|
+| RF01 | Permitir cadastro de usuário como aluno ou professor | Implementado |
+| RF02 | Permitir login de usuário | Implementado |
+| RF03 | Direcionar aluno e professor para áreas diferentes | Implementado |
+| RF04 | Bloquear páginas internas sem autenticação | Implementado |
+| RF05 | Listar aulas públicas para alunos | Implementado |
+| RF06 | Listar aulas personalizadas para alunos | Implementado |
+| RF07 | Buscar aulas por texto | Implementado |
+| RF08 | Exibir vídeo da aula | Implementado |
+| RF09 | Permitir download/acesso a material complementar | Implementado |
+| RF10 | Permitir envio de prática em vídeo pelo aluno | Implementado |
+| RF11 | Registrar prática no histórico do aluno | Implementado |
+| RF12 | Exibir práticas enviadas na área do professor | Implementado |
+| RF13 | Permitir professor enviar feedback | Implementado |
+| RF14 | Permitir aluno responder feedback | Implementado |
+| RF15 | Permitir aluno enviar vídeo-resposta | Implementado |
+| RF16 | Exibir notificações para novas práticas ou respostas | Implementado |
+| RF17 | Permitir criação de aula pública | Implementado |
+| RF18 | Permitir criação de aula personalizada | Implementado |
+| RF19 | Permitir edição de aulas | Implementado |
+| RF20 | Permitir visualização e busca de alunos pelo professor | Implementado |
+| RF21 | Permitir edição de dados de perfil | Implementado |
+| RF22 | Permitir alteração de senha | Implementado |
+| RF23 | Permitir anexar vídeo e PDF em aula | Implementado |
+
+---
+
+## 8. Requisitos não funcionais
+
+| Código | Requisito | Atendimento |
+|---|---|---|
+| RNF01 | Aplicação web responsiva para uso em navegador | Atendido parcialmente com foco desktop |
+| RNF02 | Uso de .NET 10 | Atendido |
+| RNF03 | Uso de PostgreSQL 18 | Atendido |
+| RNF04 | Não utilizar Entity Framework | Atendido |
+| RNF05 | Utilizar SQL manual | Atendido |
+| RNF06 | Separar responsabilidades em camadas | Atendido |
+| RNF07 | Armazenar senha com hash seguro | Atendido |
+| RNF08 | Permitir evolução para armazenamento em nuvem | Atendido |
+| RNF09 | Versionar o projeto no GitHub | Atendido |
+| RNF10 | Documentar execução e funcionamento | Atendido |
+
+---
+
+## 9. Ferramentas e tecnologias utilizadas
+
+### 9.1 .NET 10
+
+Utilizado como plataforma principal para desenvolvimento da aplicação Web, API e bibliotecas auxiliares.
+
+### 9.2 Blazor Server
+
+Utilizado na interface do usuário, permitindo criar telas interativas com C# e Razor Components.
+
+### 9.3 ASP.NET Core Minimal API
+
+Utilizado para criar os endpoints do backend de forma simples, objetiva e organizada.
+
+### 9.4 PostgreSQL 18
+
+Banco relacional utilizado para persistência estruturada de usuários, aulas, materiais, matrículas, gravações e feedbacks.
+
+### 9.5 Npgsql
+
+Biblioteca utilizada para comunicação direta entre .NET e PostgreSQL, executando comandos SQL manualmente.
+
+### 9.6 PBKDF2
+
+Algoritmo utilizado para hash de senhas, com salt aleatório e 100.000 iterações.
+
+### 9.7 AWS SDK S3
+
+Adicionado para preparar o sistema para armazenamento futuro de arquivos em bucket S3.
+
+### 9.8 Git e GitHub
+
+Utilizados para versionamento e publicação do projeto.
+
+### 9.9 Git LFS
+
+Utilizado para versionar vídeos e PDFs de demonstração sem prejudicar o repositório Git principal.
+
+---
+
+## 10. Arquitetura da solução
+
+O projeto foi estruturado em camadas, separando interface, API, regras de aplicação, domínio, contratos e infraestrutura.
 
 ```text
-MusicalizarPlus.slnx
-db/
-src/
-  MusicalizarPlus.Api
-  MusicalizarPlus.Application
-  MusicalizarPlus.Contracts
-  MusicalizarPlus.Domain
-  MusicalizarPlus.Infrastructure
-  MusicalizarPlus.Web
-docs/
+MusicalizarPlus
+├── db
+│   ├── 001_initial.sql
+│   ├── 002_seed.sql
+│   └── 003_demo_logins.sql
+├── docs
+│   └── DOCUMENTACAO_TCC.md
+├── src
+│   ├── MusicalizarPlus.Api
+│   ├── MusicalizarPlus.Application
+│   ├── MusicalizarPlus.Contracts
+│   ├── MusicalizarPlus.Domain
+│   ├── MusicalizarPlus.Infrastructure
+│   └── MusicalizarPlus.Web
+└── README.md
 ```
 
-### 7.1 MusicalizarPlus.Domain
+### 10.1 Camada Web
 
-Contém as entidades e enumerações principais do domínio:
+Projeto: `MusicalizarPlus.Web`
 
-- Usuario
-- Aula
-- MaterialAula
-- Matricula
-- Gravacao
-- Feedback
-- TipoUsuario
-- StatusMatricula
+Responsável por:
 
-### 7.2 MusicalizarPlus.Contracts
+- telas de login;
+- telas de cadastro;
+- área do aluno;
+- área do professor;
+- componentes compartilhados;
+- upload de arquivos;
+- exibição de vídeos;
+- integração com API;
+- armazenamento local/S3 por abstração.
 
-Contém DTOs utilizados para comunicação entre camadas e endpoints:
+### 10.2 Camada API
 
-- requisições de cadastro;
-- requisições de login;
-- respostas de usuários;
-- criação/listagem de aulas;
-- materiais;
-- matrículas;
-- gravações;
-- feedbacks.
+Projeto: `MusicalizarPlus.Api`
 
-### 7.3 MusicalizarPlus.Application
-
-Contém serviços de aplicação e interfaces:
-
-- regras de validação;
-- orquestração das operações;
-- contratos de repositórios;
-- abstração de hash de senha;
-- retorno padronizado por meio de `ServiceResult`.
-
-### 7.4 MusicalizarPlus.Infrastructure
-
-Contém a implementação de acesso a dados:
-
-- conexão com PostgreSQL usando Npgsql;
-- comandos SQL manuais;
-- repositórios concretos;
-- mapeamento de tipos;
-- hash de senha com PBKDF2.
-
-O projeto não utiliza Entity Framework, conforme requisito definido para o desenvolvimento.
-
-### 7.5 MusicalizarPlus.Api
-
-Contém a Minimal API responsável por expor endpoints HTTP:
+Responsável por expor endpoints HTTP para:
 
 - autenticação;
 - usuários;
@@ -233,314 +340,726 @@ Contém a Minimal API responsável por expor endpoints HTTP:
 - gravações;
 - feedbacks.
 
-### 7.6 MusicalizarPlus.Web
+### 10.3 Camada Application
 
-Contém a interface Blazor Server:
+Projeto: `MusicalizarPlus.Application`
 
-- páginas de login e cadastro;
-- visão do aluno;
-- visão do professor;
-- componentes compartilhados;
-- controle de upload;
-- armazenamento local/S3;
-- dados de demonstração utilizados na interface.
+Responsável por:
+
+- serviços de aplicação;
+- validações;
+- regras de negócio;
+- contratos de repositórios;
+- padronização de resultados.
+
+### 10.4 Camada Domain
+
+Projeto: `MusicalizarPlus.Domain`
+
+Responsável por:
+
+- entidades principais;
+- enumerações;
+- representação do domínio.
+
+### 10.5 Camada Contracts
+
+Projeto: `MusicalizarPlus.Contracts`
+
+Responsável por:
+
+- DTOs de entrada;
+- DTOs de resposta;
+- contratos compartilhados entre API e Web.
+
+### 10.6 Camada Infrastructure
+
+Projeto: `MusicalizarPlus.Infrastructure`
+
+Responsável por:
+
+- acesso ao PostgreSQL;
+- comandos SQL manuais;
+- repositórios;
+- hash de senha;
+- configuração de dependências.
 
 ---
 
-## 8. Tecnologias utilizadas
+## 11. Modelagem do banco de dados
 
-| Tecnologia | Uso no projeto |
-|---|---|
-| .NET 10 | Plataforma principal |
-| Blazor Server | Interface web interativa |
-| ASP.NET Core Minimal API | Endpoints backend |
-| PostgreSQL 18 | Banco de dados relacional |
-| Npgsql | Comunicação direta com PostgreSQL |
-| PBKDF2 | Hash seguro de senhas |
-| AWS SDK S3 | Preparação para armazenamento em nuvem |
-| Git LFS | Versionamento de vídeos e PDFs de demonstração |
-| HTML/CSS/JavaScript | Estrutura visual, animações e interações |
+O banco relacional foi modelado com as seguintes tabelas:
 
----
+- `usuarios`;
+- `aulas`;
+- `materiais_aula`;
+- `matriculas`;
+- `gravacoes`;
+- `feedbacks`.
 
-## 9. Banco de dados
-
-O banco foi modelado para representar usuários, aulas, materiais, matrículas, gravações e feedbacks.
-
-### 9.1 Tabelas principais
-
-#### usuarios
+### 11.1 Tabela usuarios
 
 Armazena alunos e professores.
 
 Campos principais:
 
-- `id_usuario`
-- `nome`
-- `email`
-- `senha_hash`
-- `tipo`
-- `data_cadastro`
+- `id_usuario`;
+- `nome`;
+- `email`;
+- `senha_hash`;
+- `tipo`;
+- `data_cadastro`.
 
-#### aulas
+### 11.2 Tabela aulas
 
 Armazena aulas criadas por professores.
 
 Campos principais:
 
-- `id_aula`
-- `id_professor`
-- `titulo`
-- `descricao`
-- `nivel`
-- `data_criacao`
+- `id_aula`;
+- `id_professor`;
+- `titulo`;
+- `descricao`;
+- `nivel`;
+- `data_criacao`.
 
-#### materiais_aula
+### 11.3 Tabela materiais_aula
 
-Armazena referências para materiais vinculados às aulas.
+Armazena os materiais complementares das aulas.
 
 Campos principais:
 
-- `id_material`
-- `id_aula`
-- `tipo`
-- `url_arquivo`
-- `descricao`
+- `id_material`;
+- `id_aula`;
+- `tipo`;
+- `url_arquivo`;
+- `descricao`.
 
-#### matriculas
+### 11.4 Tabela matriculas
 
 Relaciona alunos e aulas.
 
 Campos principais:
 
-- `id_matricula`
-- `id_aluno`
-- `id_aula`
-- `data_matricula`
-- `status`
+- `id_matricula`;
+- `id_aluno`;
+- `id_aula`;
+- `data_matricula`;
+- `status`.
 
-#### gravacoes
+### 11.5 Tabela gravacoes
 
 Armazena práticas enviadas por alunos.
 
 Campos principais:
 
-- `id_gravacao`
-- `id_matricula`
-- `caminho_arquivo`
-- `data_envio`
-- `observacao_aluno`
+- `id_gravacao`;
+- `id_matricula`;
+- `caminho_arquivo`;
+- `data_envio`;
+- `observacao_aluno`.
 
-#### feedbacks
+### 11.6 Tabela feedbacks
 
-Armazena feedbacks dos professores e respostas dos alunos.
+Armazena feedback do professor e resposta do aluno.
 
 Campos principais:
 
-- `id_feedback`
-- `id_gravacao`
-- `id_professor`
-- `comentario`
-- `comentario_aluno`
-- `data_feedback`
-
-### 9.2 Scripts SQL
-
-Os scripts estão na pasta `db/`:
-
-- `001_initial.sql`: criação das tabelas e índices;
-- `002_seed.sql`: dados iniciais;
-- `003_demo_logins.sql`: usuários e dados para demonstração.
+- `id_feedback`;
+- `id_gravacao`;
+- `id_professor`;
+- `comentario`;
+- `comentario_aluno`;
+- `data_feedback`.
 
 ---
 
-## 10. API
+## 12. Diagramas do sistema
 
-### 10.1 Endpoints principais
+### 12.1 Diagrama de arquitetura
 
-| Método | Rota | Finalidade |
-|---|---|---|
-| GET | `/` | Verifica status da API |
-| POST | `/api/auth/login` | Realiza login |
-| POST | `/api/usuarios` | Cadastra usuário |
-| GET | `/api/usuarios/{id}` | Busca usuário |
-| PUT | `/api/usuarios/{id}` | Atualiza usuário |
-| PUT | `/api/usuarios/{id}/senha` | Altera senha |
-| GET | `/api/aulas` | Lista aulas |
-| GET | `/api/aulas/{id}` | Busca aula |
-| POST | `/api/aulas` | Cria aula |
-| GET | `/api/aulas/{idAula}/materiais` | Lista materiais da aula |
-| POST | `/api/materiais` | Cadastra material |
-| GET | `/api/matriculas/aluno/{idAluno}` | Lista matrículas do aluno |
-| POST | `/api/matriculas` | Cria matrícula |
-| GET | `/api/gravacoes/{id}` | Busca gravação |
-| GET | `/api/gravacoes/matricula/{idMatricula}` | Lista gravações por matrícula |
-| POST | `/api/gravacoes` | Cria gravação |
-| GET | `/api/feedbacks/gravacao/{idGravacao}` | Lista feedbacks de uma gravação |
-| POST | `/api/feedbacks` | Cria feedback |
+```mermaid
+flowchart LR
+    Usuario["Aluno / Professor"] --> Web["MusicalizarPlus.Web<br/>Blazor Server"]
+    Web --> ApiClient["MusicalizarPlusApiClient"]
+    ApiClient --> Api["MusicalizarPlus.Api<br/>Minimal API"]
+    Api --> Application["MusicalizarPlus.Application<br/>Serviços e regras"]
+    Application --> Repositories["Interfaces de repositório"]
+    Repositories --> Infrastructure["MusicalizarPlus.Infrastructure<br/>Npgsql + SQL manual"]
+    Infrastructure --> Database["PostgreSQL 18"]
+    Web --> Storage["IFileStorage"]
+    Storage --> Local["App_Data/uploads"]
+    Storage -. evolução .-> S3["AWS S3"]
+```
+
+### 12.2 Diagrama de caso de uso
+
+```mermaid
+flowchart TB
+    Aluno((Aluno))
+    Professor((Professor))
+
+    UC_Login["Realizar login"]
+    UC_Cadastro["Criar conta"]
+    UC_Perfil["Editar perfil"]
+    UC_AlterarSenha["Alterar senha"]
+
+    UC_ListarAulas["Visualizar aulas"]
+    UC_BuscarAulas["Buscar aulas"]
+    UC_AssistirAula["Assistir vídeo da aula"]
+    UC_BaixarMaterial["Baixar material de apoio"]
+    UC_EnviarPratica["Enviar prática em vídeo"]
+    UC_Historico["Consultar histórico de práticas"]
+    UC_VerFeedback["Visualizar feedback"]
+    UC_ResponderFeedback["Responder feedback"]
+    UC_EnviarVideoResposta["Enviar vídeo-resposta"]
+
+    UC_PainelProfessor["Visualizar painel do professor"]
+    UC_CriarPublica["Criar aula pública"]
+    UC_CriarPrivada["Criar aula personalizada"]
+    UC_AnexarVideo["Anexar vídeo da aula"]
+    UC_AnexarMaterial["Anexar material PDF"]
+    UC_EditarAulas["Editar aulas"]
+    UC_VerAlunos["Visualizar alunos"]
+    UC_BuscarAlunos["Buscar alunos"]
+    UC_VerPraticas["Visualizar práticas"]
+    UC_AvaliarPratica["Enviar feedback"]
+    UC_Notificacoes["Visualizar notificações"]
+
+    Aluno --> UC_Login
+    Aluno --> UC_Cadastro
+    Aluno --> UC_Perfil
+    Aluno --> UC_AlterarSenha
+    Aluno --> UC_ListarAulas
+    Aluno --> UC_BuscarAulas
+    Aluno --> UC_AssistirAula
+    Aluno --> UC_BaixarMaterial
+    Aluno --> UC_EnviarPratica
+    Aluno --> UC_Historico
+    Aluno --> UC_VerFeedback
+    Aluno --> UC_ResponderFeedback
+    Aluno --> UC_EnviarVideoResposta
+
+    Professor --> UC_Login
+    Professor --> UC_Cadastro
+    Professor --> UC_Perfil
+    Professor --> UC_AlterarSenha
+    Professor --> UC_PainelProfessor
+    Professor --> UC_CriarPublica
+    Professor --> UC_CriarPrivada
+    Professor --> UC_AnexarVideo
+    Professor --> UC_AnexarMaterial
+    Professor --> UC_EditarAulas
+    Professor --> UC_VerAlunos
+    Professor --> UC_BuscarAlunos
+    Professor --> UC_VerPraticas
+    Professor --> UC_AvaliarPratica
+    Professor --> UC_Notificacoes
+
+    UC_CriarPublica --> UC_AnexarVideo
+    UC_CriarPublica --> UC_AnexarMaterial
+    UC_CriarPrivada --> UC_AnexarVideo
+    UC_CriarPrivada --> UC_AnexarMaterial
+    UC_VerPraticas --> UC_AvaliarPratica
+    UC_VerFeedback --> UC_ResponderFeedback
+    UC_VerFeedback --> UC_EnviarVideoResposta
+```
+
+### 12.3 Diagrama de classes do domínio
+
+```mermaid
+classDiagram
+    class Usuario {
+        +int Id
+        +string Nome
+        +string Email
+        +string SenhaHash
+        +TipoUsuario Tipo
+        +DateTime DataCadastro
+    }
+
+    class Aula {
+        +int Id
+        +int IdProfessor
+        +string Titulo
+        +string Descricao
+        +string Nivel
+        +DateTime DataCriacao
+    }
+
+    class MaterialAula {
+        +int Id
+        +int IdAula
+        +string Tipo
+        +string UrlArquivo
+        +string Descricao
+    }
+
+    class Matricula {
+        +int Id
+        +int IdAluno
+        +int IdAula
+        +DateTime DataMatricula
+        +StatusMatricula Status
+    }
+
+    class Gravacao {
+        +int Id
+        +int IdMatricula
+        +string CaminhoArquivo
+        +DateTime DataEnvio
+        +string ObservacaoAluno
+    }
+
+    class Feedback {
+        +int Id
+        +int IdGravacao
+        +int IdProfessor
+        +string Comentario
+        +string ComentarioAluno
+        +DateTime DataFeedback
+    }
+
+    class TipoUsuario {
+        <<enumeration>>
+        ALUNO
+        PROFESSOR
+    }
+
+    class StatusMatricula {
+        <<enumeration>>
+        ATIVA
+        CANCELADA
+        CONCLUIDA
+    }
+
+    Usuario "1" --> "0..*" Aula : professor cria
+    Usuario "1" --> "0..*" Matricula : aluno possui
+    Aula "1" --> "0..*" MaterialAula : contém
+    Aula "1" --> "0..*" Matricula : recebe
+    Matricula "1" --> "0..*" Gravacao : possui
+    Gravacao "1" --> "0..*" Feedback : recebe
+    Usuario "1" --> "0..*" Feedback : professor envia
+    Usuario --> TipoUsuario
+    Matricula --> StatusMatricula
+```
+
+### 12.4 Diagrama de classes de serviços e infraestrutura
+
+```mermaid
+classDiagram
+    class MusicalizarPlusApiClient {
+        +LoginAsync()
+        +CriarUsuarioAsync()
+        +ObterUsuarioAsync()
+        +AtualizarUsuarioAsync()
+        +AlterarSenhaAsync()
+    }
+
+    class LearningContentStore {
+        +PublicLessons
+        +Practices
+        +SaveLessonAsync()
+        +UpdateLesson()
+        +SavePracticeVideoAsync()
+        +SaveFeedback()
+        +SaveStudentReply()
+        +MarkPracticeViewed()
+    }
+
+    class ProfilePreferencesStore {
+        +Get()
+        +Save()
+    }
+
+    class IFileStorage {
+        <<interface>>
+        +SaveAsync()
+        +OpenReadAsync()
+    }
+
+    class LocalFileStorage {
+        +SaveAsync()
+        +OpenReadAsync()
+    }
+
+    class S3FileStorage {
+        +SaveAsync()
+        +OpenReadAsync()
+    }
+
+    class UsuarioService {
+        +CriarAsync()
+        +AtualizarAsync()
+        +AlterarSenhaAsync()
+        +LoginAsync()
+    }
+
+    class AulaService
+    class MaterialAulaService
+    class MatriculaService
+    class GravacaoService
+    class FeedbackService
+
+    IFileStorage <|.. LocalFileStorage
+    IFileStorage <|.. S3FileStorage
+    LearningContentStore --> IFileStorage
+    MusicalizarPlusApiClient --> UsuarioService
+    UsuarioService --> UsuarioRepository
+    AulaService --> AulaRepository
+    MaterialAulaService --> MaterialAulaRepository
+    MatriculaService --> MatriculaRepository
+    GravacaoService --> GravacaoRepository
+    FeedbackService --> FeedbackRepository
+```
+
+### 12.5 Diagrama entidade-relacionamento
+
+```mermaid
+erDiagram
+    USUARIOS ||--o{ AULAS : cria
+    USUARIOS ||--o{ MATRICULAS : realiza
+    AULAS ||--o{ MATERIAIS_AULA : possui
+    AULAS ||--o{ MATRICULAS : contem
+    MATRICULAS ||--o{ GRAVACOES : gera
+    GRAVACOES ||--o{ FEEDBACKS : recebe
+    USUARIOS ||--o{ FEEDBACKS : envia
+
+    USUARIOS {
+        int id_usuario PK
+        varchar nome
+        varchar email
+        varchar senha_hash
+        varchar tipo
+        timestamp data_cadastro
+    }
+
+    AULAS {
+        int id_aula PK
+        int id_professor FK
+        varchar titulo
+        text descricao
+        varchar nivel
+        timestamp data_criacao
+    }
+
+    MATERIAIS_AULA {
+        int id_material PK
+        int id_aula FK
+        varchar tipo
+        varchar url_arquivo
+        text descricao
+    }
+
+    MATRICULAS {
+        int id_matricula PK
+        int id_aluno FK
+        int id_aula FK
+        timestamp data_matricula
+        varchar status
+    }
+
+    GRAVACOES {
+        int id_gravacao PK
+        int id_matricula FK
+        varchar caminho_arquivo
+        timestamp data_envio
+        text observacao_aluno
+    }
+
+    FEEDBACKS {
+        int id_feedback PK
+        int id_gravacao FK
+        int id_professor FK
+        text comentario
+        text comentario_aluno
+        timestamp data_feedback
+    }
+```
+
+### 12.6 Sequência: envio de prática e feedback
+
+```mermaid
+sequenceDiagram
+    participant Aluno
+    participant Web as Blazor Web
+    participant Store as LearningContentStore
+    participant Storage as IFileStorage
+    participant Professor
+
+    Aluno->>Web: seleciona aula
+    Aluno->>Web: envia vídeo da prática
+    Web->>Store: SavePracticeVideoAsync()
+    Store->>Storage: salva arquivo
+    Storage-->>Store: retorna chave/metadados
+    Store-->>Web: prática registrada
+    Professor->>Web: acessa "Ver práticas"
+    Web->>Store: lista práticas do professor
+    Professor->>Web: abre prática
+    Professor->>Store: SaveFeedback()
+    Store-->>Web: feedback registrado
+    Aluno->>Web: acessa histórico
+    Web->>Store: carrega feedback
+    Aluno->>Store: SaveStudentReply()
+```
+
+### 12.7 Sequência: criação de aula
+
+```mermaid
+sequenceDiagram
+    participant Professor
+    participant Web as Blazor Web
+    participant Store as LearningContentStore
+    participant Storage as IFileStorage
+
+    Professor->>Web: escolhe criar aula pública ou personalizada
+    Professor->>Web: preenche título, descrição e nível
+    Professor->>Web: seleciona vídeo e material
+    Web->>Store: SaveLessonAsync()
+    Store->>Storage: salva vídeo
+    Storage-->>Store: metadados do vídeo
+    Store->>Storage: salva material
+    Storage-->>Store: metadados do material
+    Store-->>Web: aula criada
+    Web-->>Professor: exibe confirmação
+```
 
 ---
 
-## 11. Funcionalidades detalhadas
+## 13. Casos de uso
 
-### 11.1 Login
+### 13.1 UC01 - Realizar login
 
-O login permite que alunos e professores acessem a plataforma. A aplicação identifica o tipo de usuário e direciona para a área correta.
-
-Fluxo:
+**Ator:** aluno ou professor  
+**Objetivo:** acessar a plataforma com credenciais válidas.  
+**Pré-condição:** usuário cadastrado.  
+**Fluxo principal:**
 
 1. O usuário informa e-mail e senha.
-2. O sistema valida as credenciais.
-3. O hash da senha é verificado com PBKDF2.
-4. O usuário autenticado é direcionado para sua área.
+2. O sistema envia as credenciais para validação.
+3. O sistema verifica a senha.
+4. O sistema cria a sessão autenticada.
+5. O usuário é direcionado para a área correspondente ao seu perfil.
 
-### 11.2 Cadastro
+**Pós-condição:** usuário autenticado.
 
-Permite criação de conta de aluno ou professor.
+### 13.2 UC02 - Visualizar aulas do aluno
 
-Campos principais:
+**Ator:** aluno  
+**Objetivo:** acessar aulas públicas e personalizadas.  
+**Fluxo principal:**
 
-- função;
-- nome;
-- e-mail;
-- senha;
-- confirmação de senha.
+1. O aluno realiza login.
+2. O sistema exibe aulas personalizadas.
+3. O sistema exibe aulas gerais.
+4. O aluno pode buscar aulas.
+5. O aluno abre uma aula.
 
-### 11.3 Área do aluno
+**Pós-condição:** aula disponível para estudo.
 
-A área do aluno possui:
+### 13.3 UC03 - Enviar prática
 
-- lista de aulas personalizadas;
-- lista de aulas gerais;
-- busca;
-- acesso ao perfil;
-- histórico de práticas;
-- envio de gravações.
-
-### 11.4 Aulas do aluno
-
-Cada aula possui:
-
-- título;
-- descrição;
-- nível;
-- vídeo;
-- botão visual de play;
-- material complementar, quando disponível.
-
-### 11.5 Envio de prática
-
-O aluno pode enviar um vídeo de prática para avaliação.
-
-Fluxo:
+**Ator:** aluno  
+**Objetivo:** enviar vídeo de prática para avaliação.  
+**Fluxo principal:**
 
 1. O aluno acessa a aula.
-2. Clica em enviar prática.
-3. Seleciona um vídeo.
+2. O aluno entra na tela de envio de prática.
+3. O aluno seleciona um vídeo.
 4. O sistema salva o arquivo.
-5. A prática aparece no histórico do aluno.
-6. A prática aparece na visão do professor.
+5. O sistema registra a prática.
+6. O professor passa a visualizar a prática.
 
-### 11.6 Histórico de práticas
+**Pós-condição:** prática pendente para avaliação.
 
-O histórico permite acompanhar:
+### 13.4 UC04 - Visualizar histórico de práticas
 
-- data de envio;
-- aula relacionada;
-- status;
-- feedback recebido;
-- resposta enviada.
+**Ator:** aluno  
+**Objetivo:** acompanhar práticas enviadas e feedbacks.  
+**Fluxo principal:**
 
-Status possíveis:
+1. O aluno acessa o histórico.
+2. O sistema exibe práticas enviadas.
+3. O sistema informa se a prática está avaliada ou aguardando avaliação.
+4. O aluno abre uma prática.
+5. O aluno visualiza o feedback, se existir.
 
-- aguardando avaliação do professor;
-- prática avaliada.
+### 13.5 UC05 - Responder feedback
 
-### 11.7 Feedback
+**Ator:** aluno  
+**Objetivo:** responder orientação enviada pelo professor.  
+**Fluxo principal:**
 
-O professor visualiza a prática enviada e registra uma orientação.
+1. O aluno abre uma prática avaliada.
+2. O aluno lê o feedback.
+3. O aluno escreve uma resposta.
+4. O sistema salva a resposta.
+5. O professor passa a ser notificado da nova resposta.
 
-O aluno pode:
+### 13.6 UC06 - Criar aula pública
 
-- visualizar o feedback;
-- responder com mensagem;
-- enviar vídeo-resposta.
+**Ator:** professor  
+**Objetivo:** publicar aula disponível para todos os alunos.  
+**Fluxo principal:**
 
-### 11.8 Área do professor
+1. O professor acessa “Adicionar nova aula”.
+2. O professor escolhe aula pública.
+3. O professor informa título, descrição e nível.
+4. O professor anexa vídeo e material, quando necessário.
+5. O sistema salva a aula.
 
-A área do professor possui:
+### 13.7 UC07 - Criar aula personalizada
 
-- painel inicial;
-- aulas gerais postadas;
-- criação de nova aula;
-- edição de aulas;
-- visualização de alunos;
-- visualização de práticas;
-- notificações.
+**Ator:** professor  
+**Objetivo:** criar aula direcionada a um aluno específico.  
+**Fluxo principal:**
 
-### 11.9 Aulas públicas
+1. O professor acessa “Adicionar nova aula”.
+2. O professor escolhe aula personalizada.
+3. O sistema exibe alunos vinculados ao professor.
+4. O professor seleciona o aluno.
+5. O professor informa título, descrição e nível.
+6. O professor anexa vídeo e material.
+7. O sistema salva a aula personalizada.
 
-Aula pública é disponibilizada para todos os alunos da plataforma.
+### 13.8 UC08 - Avaliar prática
 
-Campos:
+**Ator:** professor  
+**Objetivo:** enviar feedback para prática enviada pelo aluno.  
+**Fluxo principal:**
 
-- título;
-- descrição;
-- nível;
-- vídeo;
-- material complementar.
+1. O professor acessa “Ver práticas”.
+2. O sistema lista práticas dos seus alunos.
+3. O professor abre uma prática.
+4. O professor assiste ao vídeo.
+5. O professor escreve o feedback.
+6. O sistema salva o feedback.
+7. O aluno passa a visualizar a avaliação.
 
-### 11.10 Aulas personalizadas
+### 13.9 UC09 - Visualizar alunos
 
-Aula personalizada é destinada a um aluno específico.
+**Ator:** professor  
+**Objetivo:** consultar alunos vinculados.  
+**Fluxo principal:**
 
-Campos:
+1. O professor acessa “Visualizar alunos”.
+2. O sistema lista seus alunos.
+3. O professor pode buscar pelo nome.
 
-- aluno;
-- título;
-- descrição;
-- nível;
-- vídeo;
-- material complementar.
+### 13.10 UC10 - Editar perfil
 
-### 11.11 Perfil
+**Ator:** aluno ou professor  
+**Objetivo:** alterar dados pessoais.  
+**Fluxo principal:**
 
-O perfil permite alterar dados exibidos na plataforma.
-
-Dados do aluno:
-
-- nome;
-- e-mail;
-- pronome;
-- instrumento;
-- nível;
-- professor;
-- foto de perfil.
-
-Dados do professor:
-
-- nome;
-- e-mail;
-- telefone;
-- instrumentos ensinados;
-- níveis de ensino;
-- foto de perfil.
+1. O usuário acessa “Meus dados”.
+2. O usuário edita informações permitidas.
+3. O usuário salva.
+4. O sistema atualiza os dados.
 
 ---
 
-## 12. Armazenamento de arquivos
+## 14. Funcionalidades implementadas
 
-O sistema usa uma abstração chamada `IFileStorage`, permitindo trocar o provedor de armazenamento sem alterar as páginas principais.
+### 14.1 Login e cadastro
 
-### 12.1 Armazenamento local
+O sistema possui telas separadas para login e criação de conta. O cadastro permite escolher o tipo de usuário: aluno ou professor. Após o login, o sistema identifica o papel do usuário e redireciona para a área correta.
 
-No modo local, arquivos são salvos em:
+### 14.2 Proteção de rotas
+
+As páginas internas utilizam autenticação. Usuários não autenticados são redirecionados para login.
+
+### 14.3 Visão do aluno
+
+Na visão do aluno foram implementadas:
+
+- lista de aulas;
+- aulas personalizadas;
+- aulas gerais;
+- campo de busca;
+- visualização de vídeo;
+- acesso a material complementar;
+- envio de prática;
+- histórico de práticas;
+- visualização de feedback;
+- resposta ao feedback;
+- envio de vídeo-resposta;
+- edição de perfil.
+
+### 14.4 Visão do professor
+
+Na visão do professor foram implementadas:
+
+- painel inicial;
+- menu lateral;
+- criação de aula pública;
+- criação de aula personalizada;
+- upload de vídeo;
+- upload de material PDF;
+- edição de aulas;
+- visualização de alunos;
+- busca de alunos;
+- visualização de práticas;
+- envio de feedback;
+- notificações;
+- edição de perfil;
+- alteração de senha.
+
+### 14.5 Fluxo de feedback
+
+O fluxo de feedback representa o núcleo pedagógico do projeto:
+
+1. professor publica aula;
+2. aluno estuda a aula;
+3. aluno envia prática;
+4. professor avalia;
+5. aluno visualiza feedback;
+6. aluno responde com texto ou vídeo.
+
+Esse fluxo demonstra o objetivo principal do Musicalizar+: organizar o acompanhamento do aprendizado musical.
+
+---
+
+## 15. Segurança
+
+O sistema implementa medidas importantes de segurança:
+
+- armazenamento de senha com PBKDF2-SHA256;
+- uso de salt aleatório;
+- 100.000 iterações no hash;
+- comparação segura de hash;
+- autenticação por cookie;
+- proteção de páginas internas;
+- arquivos locais de desenvolvimento ignorados no Git;
+- conexão de banco configurável por ambiente.
+
+### 15.1 Cuidados para produção
+
+Em ambiente real, recomenda-se:
+
+- obrigar HTTPS;
+- usar variáveis de ambiente para segredos;
+- armazenar arquivos em bucket privado;
+- usar URLs assinadas para vídeos;
+- implementar limite e validação de tipos de arquivo;
+- adicionar logs e monitoramento;
+- configurar backup do banco.
+
+---
+
+## 16. Armazenamento de arquivos
+
+O sistema trabalha com uma interface chamada `IFileStorage`, permitindo alternar entre armazenamento local e S3.
+
+### 16.1 Armazenamento local
+
+Durante o desenvolvimento e demonstração, os arquivos são salvos em:
 
 ```text
 src/MusicalizarPlus.Web/App_Data/uploads
 ```
 
-Subpastas principais:
+Pastas utilizadas:
 
 ```text
 aulas/videos
@@ -549,11 +1068,9 @@ praticas/videos
 perfil/fotos
 ```
 
-### 12.2 Armazenamento em AWS S3
+### 16.2 Preparação para AWS S3
 
-O projeto já possui preparação para S3 com `AWSSDK.S3`.
-
-Configuração prevista:
+O projeto possui implementação para S3 por meio da classe `S3FileStorage`. A configuração prevista é:
 
 ```json
 {
@@ -568,52 +1085,20 @@ Configuração prevista:
 }
 ```
 
-Em produção, a recomendação é:
-
-- manter vídeos e PDFs em S3;
-- manter o bucket privado;
-- entregar arquivos por URLs assinadas ou por endpoint autenticado;
-- não salvar binários diretamente no PostgreSQL;
-- salvar apenas metadados e chaves dos arquivos.
+Para produção, a recomendação é manter vídeos e PDFs fora do banco de dados. O banco deve guardar apenas os metadados e a chave do arquivo.
 
 ---
 
-## 13. Segurança
+## 17. Execução local
 
-Medidas aplicadas:
+### 17.1 Pré-requisitos
 
-- senhas armazenadas com hash PBKDF2-SHA256;
-- uso de salt aleatório;
-- 100.000 iterações no hash de senha;
-- comparação segura com `FixedTimeEquals`;
-- validação de dados nos serviços de aplicação;
-- separação entre dados de aluno e professor;
-- controle de acesso nas páginas internas;
-- arquivos de configuração local ignorados no Git.
+- .NET 10 SDK;
+- PostgreSQL 18;
+- Git;
+- Git LFS.
 
-Cuidados adicionais recomendados para produção:
-
-- usar HTTPS obrigatório;
-- configurar autenticação robusta com cookies protegidos ou JWT;
-- usar Secret Manager, Parameter Store ou variáveis de ambiente;
-- limitar tamanho e tipo de upload;
-- usar antivírus/validação de arquivos;
-- configurar logs e monitoramento;
-- restringir CORS;
-- aplicar backup automático no PostgreSQL.
-
----
-
-## 14. Execução local
-
-### 14.1 Pré-requisitos
-
-- .NET 10 SDK
-- PostgreSQL 18
-- Git
-- Git LFS
-
-### 14.2 Clonar o repositório
+### 17.2 Clonar repositório
 
 ```powershell
 git clone https://github.com/DarluceReis/MusicalizarPlus.git
@@ -621,15 +1106,13 @@ cd MusicalizarPlus
 git lfs pull
 ```
 
-### 14.3 Configurar o banco
-
-Crie o banco:
+### 17.3 Criar banco de dados
 
 ```powershell
 createdb -h localhost -p 5433 -U postgres musicalizarplus
 ```
 
-Execute os scripts:
+### 17.4 Executar scripts SQL
 
 ```powershell
 psql -h localhost -p 5433 -U postgres -d musicalizarplus -f db/001_initial.sql
@@ -637,34 +1120,29 @@ psql -h localhost -p 5433 -U postgres -d musicalizarplus -f db/002_seed.sql
 psql -h localhost -p 5433 -U postgres -d musicalizarplus -f db/003_demo_logins.sql
 ```
 
-### 14.4 Configurar appsettings local
+### 17.5 Configurar appsettings
 
-Copie o exemplo da API:
+Copiar arquivos de exemplo:
 
 ```powershell
 copy src\MusicalizarPlus.Api\appsettings.Development.example.json src\MusicalizarPlus.Api\appsettings.Development.json
+copy src\MusicalizarPlus.Web\appsettings.Development.example.json src\MusicalizarPlus.Web\appsettings.Development.json
 ```
 
-Depois edite a senha do PostgreSQL no arquivo:
+Editar a senha do PostgreSQL em:
 
 ```text
 src/MusicalizarPlus.Api/appsettings.Development.json
 ```
 
-Copie o exemplo da Web:
-
-```powershell
-copy src\MusicalizarPlus.Web\appsettings.Development.example.json src\MusicalizarPlus.Web\appsettings.Development.json
-```
-
-### 14.5 Restaurar e compilar
+### 17.6 Compilar
 
 ```powershell
 dotnet restore MusicalizarPlus.slnx
 dotnet build MusicalizarPlus.slnx
 ```
 
-### 14.6 Rodar API
+### 17.7 Executar API
 
 ```powershell
 dotnet run --project src/MusicalizarPlus.Api --launch-profile http
@@ -676,9 +1154,7 @@ URL:
 http://localhost:5298
 ```
 
-### 14.7 Rodar Web
-
-Em outro terminal:
+### 17.8 Executar Web
 
 ```powershell
 dotnet run --project src/MusicalizarPlus.Web --launch-profile http
@@ -692,28 +1168,19 @@ http://localhost:5030
 
 ---
 
-## 15. Contas de demonstração
+## 18. Contas de demonstração
 
-Senha padrão das contas de demonstração:
+Senha padrão:
 
 ```text
 P@ssw0rd
 ```
 
-### Professor com alunos
+### Professor
 
 ```text
 vinicius.prof@musicalizarplus.local
 ```
-
-Alunos vinculados:
-
-- João Alves
-- Ana Maria
-- Daniela Roc.
-- Rui Barbosa
-- Marina Costa
-- Caio Lima
 
 ### Alunos
 
@@ -724,92 +1191,99 @@ daniela.aluno@musicalizarplus.local
 rui.aluno@musicalizarplus.local
 ```
 
----
+### Alunos vinculados ao professor Vinicius Alves
 
-## 16. Fluxos recomendados para demonstração
-
-### 16.1 Fluxo do aluno
-
-1. Entrar com uma conta de aluno.
-2. Visualizar lista de aulas.
-3. Usar o campo de busca.
-4. Abrir uma aula.
-5. Baixar material de apoio.
-6. Enviar uma prática em vídeo.
-7. Acessar histórico de práticas.
-8. Verificar status da prática.
-9. Responder a feedback, quando houver.
-
-### 16.2 Fluxo do professor
-
-1. Entrar com a conta do professor.
-2. Visualizar painel inicial.
-3. Criar aula pública.
-4. Criar aula personalizada para um aluno.
-5. Anexar vídeo e PDF.
-6. Visualizar alunos.
-7. Buscar aluno pelo nome.
-8. Acessar práticas recebidas.
-9. Abrir uma prática.
-10. Enviar feedback.
-11. Verificar notificação de resposta do aluno.
+- João Alves;
+- Ana Maria;
+- Daniela Roc.;
+- Rui Barbosa;
+- Marina Costa;
+- Caio Lima.
 
 ---
 
-## 17. Versionamento
+## 19. Testes e validação
 
-O projeto utiliza Git e GitHub.
+Durante o desenvolvimento foram realizadas validações manuais dos principais fluxos:
 
-Repositório:
+- cadastro de usuário;
+- login de aluno;
+- login de professor;
+- proteção de páginas internas;
+- visualização de aulas;
+- busca de aulas;
+- criação de aula pública;
+- criação de aula personalizada;
+- upload de vídeo;
+- upload de material PDF;
+- envio de prática;
+- visualização de prática pelo professor;
+- envio de feedback;
+- resposta do aluno;
+- envio de vídeo-resposta;
+- histórico de práticas;
+- notificações;
+- edição de perfil;
+- alteração de senha.
 
-```text
-https://github.com/DarluceReis/MusicalizarPlus
-```
-
-Arquivos grandes, como vídeos e PDFs, são versionados com Git LFS.
-
-Comandos úteis:
+Também foi executado o build da aplicação para validação técnica:
 
 ```powershell
-git status
-git add .
-git commit -m "Mensagem do commit"
-git push
+dotnet build MusicalizarPlus.slnx
+```
+
+Em verificações realizadas durante o desenvolvimento, o projeto compilou com sucesso após os ajustes finais.
+
+---
+
+## 20. Limitações e melhorias futuras
+
+Apesar de funcional para a proposta acadêmica, o sistema possui possibilidades de evolução:
+
+- publicar a aplicação em ambiente de produção;
+- substituir dados locais de demonstração por persistência integral em banco;
+- integrar totalmente os metadados de arquivos ao PostgreSQL;
+- usar AWS S3 com bucket privado em produção;
+- usar CloudFront para distribuição de vídeos;
+- implementar recuperação de senha;
+- implementar painel administrativo;
+- adicionar relatórios de progresso;
+- adicionar controle de turmas;
+- adicionar chat entre aluno e professor;
+- adicionar testes automatizados;
+- melhorar responsividade para dispositivos móveis;
+- adicionar logs de auditoria.
+
+---
+
+## 21. Conclusão
+
+O Musicalizar+ atende à proposta do Trabalho de Conclusão de Curso ao entregar uma plataforma web funcional para apoio ao ensino musical. O sistema resolve o problema de dispersão de aulas, práticas, materiais e feedbacks ao centralizar esses elementos em uma única aplicação.
+
+A plataforma contempla dois perfis principais: aluno e professor. O aluno consegue acessar aulas, enviar práticas e acompanhar feedbacks. O professor consegue criar aulas, acompanhar alunos, visualizar práticas e registrar avaliações. O fluxo implementado demonstra o ciclo pedagógico essencial: publicação de conteúdo, estudo, prática, avaliação e resposta.
+
+Do ponto de vista técnico, o projeto utiliza tecnologias modernas e uma organização em camadas, com separação entre interface, API, aplicação, domínio, contratos e infraestrutura. O uso de PostgreSQL com SQL manual atende ao requisito de trabalhar diretamente com banco relacional sem Entity Framework. O versionamento no GitHub, a documentação e a preparação para armazenamento em nuvem reforçam a possibilidade de evolução do sistema.
+
+Dessa forma, o projeto demonstra uma solução coerente, funcional e alinhada ao objetivo proposto.
+
+---
+
+## 22. Link da defesa em vídeo
+
+Inserir o link da defesa gravada ao final da documentação:
+
+```text
+[INSERIR AQUI O LINK DO VÍDEO DA DEFESA]
 ```
 
 ---
 
-## 18. Considerações sobre vídeos no TCC
+## 23. Referências
 
-Para apresentação acadêmica, é possível utilizar vídeos demonstrativos, desde que respeitados os direitos autorais e as licenças de uso. A opção mais segura é:
+- Microsoft. Documentação oficial do .NET.  
+- Microsoft. Documentação oficial do ASP.NET Core e Blazor.  
+- PostgreSQL Global Development Group. Documentação oficial do PostgreSQL.  
+- Npgsql. Documentação oficial do driver Npgsql para .NET.  
+- Amazon Web Services. Documentação oficial do Amazon S3.  
+- GitHub. Documentação oficial do GitHub e Git LFS.  
 
-- gravar vídeos próprios;
-- usar vídeos de bancos gratuitos com licença adequada;
-- citar a fonte quando exigido;
-- evitar músicas protegidas por direitos autorais;
-- manter os vídeos apenas como demonstração técnica.
-
-Para produção real, vídeos de professores e alunos devem ser privados e controlados por autenticação.
-
----
-
-## 19. Hospedagem recomendada
-
-Para uma versão online com baixo custo:
-
-- hospedar a aplicação em AWS Elastic Beanstalk, App Runner ou EC2 simples;
-- usar PostgreSQL em RDS ou banco gerenciado equivalente;
-- usar S3 para vídeos e PDFs;
-- manter bucket privado;
-- usar CloudFront apenas se houver necessidade de distribuição otimizada;
-- usar variáveis de ambiente para conexão e credenciais.
-
-Para TCC, a execução local com GitHub e dados de demonstração é suficiente para validar o funcionamento.
-
----
-
-## 20. Conclusão
-
-O Musicalizar+ apresenta uma solução funcional para apoiar o ensino musical com interação entre professor e aluno. A plataforma contempla cadastro, autenticação, aulas públicas, aulas personalizadas, envio de vídeos, materiais complementares, histórico de práticas, feedbacks e respostas. A arquitetura em camadas, o uso de SQL manual com PostgreSQL e a separação entre interface, API, aplicação, domínio e infraestrutura tornam o projeto organizado e preparado para evolução.
-
-O sistema atende ao objetivo de demonstrar uma plataforma educacional completa, com recursos visuais, fluxos práticos e base técnica compatível com boas práticas de desenvolvimento web moderno.
