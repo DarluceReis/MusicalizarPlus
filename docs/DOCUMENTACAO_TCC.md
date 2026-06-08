@@ -1273,7 +1273,7 @@ Dessa forma, o projeto demonstra uma solução coerente, funcional e alinhada ao
 Inserir o link da defesa gravada ao final da documentação:
 
 ```text
-[https://drive.google.com/file/d/1A7tDee4gTa0P-G-oD-FGXCGUedd6xbOB/view?usp=sharing]
+https://drive.google.com/file/d/1A7tDee4gTa0P-G-oD-FGXCGUedd6xbOB/view?usp=sharing
 ```
 
 ---
